@@ -8,7 +8,7 @@ A specialized management system for **RJ Design Studio**, bridging the gap betwe
 ## 🏛️ Project Scope
 Led by **Randolf Jan H. Felices**, the portal manages:
 - **Design:** Blueprints, 3D Renderings, and Schematic Plans.
-- **Construction:** Real-time tracking of on-site building progress.
+- **Construction:** Physical building and on-site execution of the approved designs.
 - **Client Hub:** Centralized project documents and milestone updates.
 
 ---
