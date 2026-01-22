@@ -7,9 +7,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::view('/about-studio', 'about-studio')->name('about-studio');
+Route::view('/portfolio', 'portfolio')->name('portfolio');
+Route::view('/services', 'services')->name('services');
+
+
+//Client Route
+Route::get('/client/home', function () {
+    return view('client.home');
+})->middleware(['auth', 'verified'])->name('home');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

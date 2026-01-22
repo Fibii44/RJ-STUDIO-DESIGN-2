@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@import "tailwindcss";
+
+@theme {
+    /* Custom Blue Theme for RJ Design Studio */
+    --color-sky-studio: #0ea5e9;
+    --color-sky-light: #f0f9ff;
+    --color-sky-dark: #075985;
+    
+    /* Custom Shadows */
+    --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+@layer components {
+    .glass-nav {
+        @apply bg-white/70 backdrop-blur-md border-b border-black/5 dark:bg-black/80 dark:border-white/5;
+    }
+    
+    .sky-gradient {
+        background: linear-gradient(135deg, var(--color-sky-light) 0%, #e0f2fe 100%);
+    }
+}
