@@ -14,7 +14,8 @@
         
         @include('layouts.navigation')
 
-        <main class="pt-32 pb-24" x-data="{ 
+        <main class="pt-32 pb-24" 
+    x-data="{ 
         activeCategory: 'All',
         modalOpen: false,
         currentIndex: 0,
@@ -27,7 +28,8 @@
         },
         next() { this.currentIndex = (this.currentIndex + 1) % this.currentProject.images.length; },
         prev() { this.currentIndex = (this.currentIndex - 1 + this.currentProject.images.length) % this.currentProject.images.length; }
-    }">
+    }"
+    x-effect="document.body.classList.toggle('overflow-hidden', modalOpen)">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-16 pt-10">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div class="space-y-1">
