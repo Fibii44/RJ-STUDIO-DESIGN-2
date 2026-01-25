@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,8 +10,10 @@ Route::get('/', function () {
 });
 
 Route::view('/about-studio', 'about-studio')->name('about-studio');
-Route::view('/portfolio', 'portfolio')->name('portfolio');
 Route::view('/services', 'services')->name('services');
+
+// Change Route::view to Route::get
+Route::get('/portfolio', [ProjectController::class, 'index'])->name('portfolio');
 
 
 //Client Route
@@ -21,7 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         return view('client.home', compact('appointments'));
     })->middleware(['auth', 'verified'])->name('home');
-    
+
     Route::get('/my-appointments', function () {
         // Get only the current user's appointments using the relationship we built
         $appointments = Auth::user()->appointments()->latest('appointment_date')->get();
@@ -31,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Appointment Booking Routes
     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
+    Route::delete('/admin/portfolio/image/{image}', [ProjectController::class, 'destroyImage'])->name('admin.portfolio.image.destroy');
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
     
 });
@@ -39,8 +43,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Admin Route Group
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard'); // Create this blade file
+        return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    // --- Portfolio Management Routes ---
+    Route::get('/admin/portfolio', [ProjectController::class, 'adminIndex'])->name('admin.portfolio.index');
+    Route::post('/admin/portfolio', [ProjectController::class, 'store'])->name('admin.portfolio.store');
+    
+    // Inside Admin Route Group
+    Route::patch('/admin/portfolio/{project}', [ProjectController::class, 'update'])->name('admin.portfolio.update');
+    
+    // NEW: Add images to an existing bundle
+    Route::post('/admin/portfolio/{project}/add-images', [ProjectController::class, 'addImages'])->name('admin.portfolio.add-images');
+    
+    // Delete entire project
+    Route::delete('/admin/portfolio/{project}', [ProjectController::class, 'destroy'])->name('admin.portfolio.destroy');
+    
+    // Delete specific image from bundle
+    Route::delete('/admin/portfolio/image/{image}', [ProjectController::class, 'destroyImage'])->name('admin.portfolio.image.destroy');
 });
 
 Route::middleware('auth')->group(function () {

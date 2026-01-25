@@ -16,12 +16,13 @@
             </div>
 
             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="w-full justify-start px-4 py-3 rounded-xl hover:bg-slate-800 transition text-slate-400 hover:text-sky-400 border-none">
+                <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" ...>
                     {{ __('Dashboard') }}
                 </x-nav-link>
                 
-                <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl hover:bg-slate-800 hover:text-sky-400 transition">
-                    Manage Projects
+                <a href="{{ route('admin.portfolio.index') }}" 
+                class="flex items-center px-4 py-3 text-sm font-medium rounded-xl hover:bg-slate-800 hover:text-sky-400 transition {{ request()->routeIs('admin.portfolio.*') ? 'bg-slate-800 text-sky-400' : '' }}">
+                    Manage Portfolio
                 </a>
 
                 <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl hover:bg-slate-800 hover:text-sky-400 transition">
