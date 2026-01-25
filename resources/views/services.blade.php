@@ -39,7 +39,10 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-center text-xs font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white transition">Inquire for Design</a>
+                        <a href="{{ Auth::check() ? route('appointments.create', ['service' => 'Architectural Design']) : route('register') }}" 
+                           class="w-full py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-center text-xs font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white transition">
+                           {{ Auth::check() ? 'Book Consultation' : 'Inquire for Design' }}
+                        </a>
                     </div>
 
                     <div class="p-10 rounded-[3rem] border-2 border-sky-600 bg-sky-600 text-white shadow-2xl shadow-sky-200 dark:shadow-none flex flex-col justify-between transform md:-translate-y-4 relative overflow-hidden">
@@ -58,7 +61,10 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl bg-white text-sky-600 text-center text-xs font-bold uppercase tracking-widest hover:bg-sky-50 transition relative z-10">Start Full Project</a>
+                        <a href="{{ Auth::check() ? route('appointments.create', ['service' => 'Design & Build']) : route('register') }}" 
+                           class="w-full py-4 rounded-2xl bg-white text-sky-600 text-center text-xs font-bold uppercase tracking-widest hover:bg-sky-50 transition relative z-10">
+                           {{ Auth::check() ? 'Book Consultation' : 'Start Full Project' }}
+                        </a>
                         
                         <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-sky-500 rounded-full opacity-20"></div>
                     </div>
@@ -79,7 +85,10 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-center text-xs font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white transition">Inquire for Build</a>
+                        <a href="{{ Auth::check() ? route('appointments.create', ['service' => 'Construction']) : route('register') }}" 
+                           class="w-full py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-center text-xs font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white transition">
+                           {{ Auth::check() ? 'Book Consultation' : 'Inquire for Build' }}
+                        </a>
                     </div>
 
                 </div>

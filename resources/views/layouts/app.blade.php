@@ -1,4 +1,22 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    .flatpickr-calendar {
+        background: #ffffff;
+        border-radius: 2rem !important;
+        border: 1px solid #f1f5f9 !important;
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1) !important;
+        padding: 10px;
+    }
+    .flatpickr-day.selected {
+        background: #0284c7 !important; /* Sky-600 */
+        border-color: #0284c7 !important;
+    }
+    .flatpickr-months .flatpickr-month {
+        color: #0f172a !important; /* Slate-900 */
+        font-family: serif;
+    }
+</style>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">

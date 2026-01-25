@@ -42,19 +42,30 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">{{ __('Profile Settings') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('client.appointments')">
+                            {{ __('My Appointments') }}
+                        </x-dropdown-link>
+
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile Settings') }}
+                            </x-dropdown-link>
+
+                            <div class="border-t border-slate-100 dark:border-slate-800"></div>
+
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log Out') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
                             </form>
                         </x-slot>
                     </x-dropdown>
                 @else
                     <div class="flex items-center gap-4">
                         <a href="{{ route('login') }}" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-sky-600 transition">Log In</a>
-                        <a href="{{ route('register') }}" class="px-5 py-2 bg-sky-600 text-white rounded-lg text-[10px] font-bold uppercase transition">Book Now</a>
+                        <a href="{{ route('register') }}" class="px-5 py-2 bg-sky-600 text-white rounded-lg text-[10px] font-bold uppercase transition">Register</a>
                     </div>
-                @endauth
+                @endauth 
             </div>
         </div>
     </div>
