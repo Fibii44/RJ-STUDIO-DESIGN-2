@@ -121,4 +121,3 @@
         <x-project-modal />
     </main>
 </x-studio-layout>
-t>
