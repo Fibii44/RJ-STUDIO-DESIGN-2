@@ -34,7 +34,9 @@ class ProjectController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
-                $storedPath = 'storage/' . $image->store('portfolio', 'public');
+                $path = $image->store('', 'supabase');
+                $storedPath = Storage::disk('supabase')->url($path);
+                
                 $project->images()->create(['path' => $storedPath]);
                 if ($index === 0) {
                     $project->update(['image_path' => $storedPath]);
@@ -67,12 +69,14 @@ class ProjectController extends Controller
 
         if ($request->hasFile('new_images')) {
             foreach ($request->file('new_images') as $image) {
-                $path = 'storage/' . $image->store('portfolio', 'public');
-                $project->images()->create(['path' => $path]);
+                $path = $image->store('', 'supabase');
+                $storedPath = Storage::disk('supabase')->url($path);
+                
+                $project->images()->create(['path' => $storedPath]);
                 
                 // If project had no cover, set this as cover
                 if (empty($project->image_path)) {
-                    $project->update(['image_path' => $path]);
+                    $project->update(['image_path' => $storedPath]);
                 }
             }
         }
@@ -85,7 +89,12 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         foreach ($project->images as $image) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $image->path));
+            // Extract path from URL to delete from storage
+            $path = parse_url($image->path, PHP_URL_PATH);
+            $path = str_replace('/storage/v1/object/public/' . env('SUPABASE_STORAGE_BUCKET') . '/', '', $path);
+            if (!empty($path) && $path !== '/') {
+                Storage::disk('supabase')->delete($path);
+            }
         }
         $project->delete();
         return back()->with('success', 'Project and bundle deleted.');
@@ -94,7 +103,14 @@ class ProjectController extends Controller
     public function destroyImage(ProjectImage $image)
     {
         $project = $image->project;
-        Storage::disk('public')->delete(str_replace('storage/', '', $image->path));
+        
+        // Extract path from URL
+        $path = parse_url($image->path, PHP_URL_PATH);
+        $path = str_replace('/storage/v1/object/public/' . env('SUPABASE_STORAGE_BUCKET') . '/', '', $path);
+        if (!empty($path) && $path !== '/') {
+            Storage::disk('supabase')->delete($path);
+        }
+        
         $image->delete();
 
         if ($project->image_path == $image->path) {

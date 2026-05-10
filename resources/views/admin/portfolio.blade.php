@@ -114,7 +114,7 @@
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                             <template x-for="img in selectedProject.images" :key="img.id">
                                 <div class="group/img relative aspect-square rounded-[2rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-xl">
-                                    <img :src="'/' + img.path" class="w-full h-full object-cover">
+                                    <img :src="img.path" class="w-full h-full object-cover">
                                     <div class="absolute inset-0 bg-red-600/90 opacity-0 group-hover/img:opacity-100 transition-all flex items-center justify-center">
                                         <form :action="'/admin/portfolio/image/' + img.id" method="POST">
                                             @csrf @method('DELETE')
