@@ -8,9 +8,41 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 
 class ProjectController extends Controller
 {
+    /**
+     * Private helper to compress and resize images before Supabase upload
+     */
+    private function processAndStore($file)
+    {
+        // 1. Initialize Image Manager with GD driver
+        $manager = new ImageManager(new GdDriver());
+        
+        // 2. Read the image
+        $image = $manager->read($file);
+        
+        // 3. Professional Resize: Scale to 2000px width (maintaining aspect ratio)
+        // This is the standard for high-end architectural displays
+        if ($image->width() > 2000) {
+            $image->scale(width: 2000);
+        }
+        
+        // 4. Optimization: Encode to Progressive JPEG at 80% quality
+        // This reduces file size by up to 90% without visible quality loss
+        $encoded = $image->toJpeg(80);
+        
+        // 5. Unique Filename
+        $filename = 'arch_' . time() . '_' . uniqid() . '.jpg';
+        
+        // 6. Upload to Supabase
+        Storage::disk('supabase')->put($filename, (string) $encoded);
+        
+        return Storage::disk('supabase')->url($filename);
+    }
+
     public function index()
     {
         $projects = Project::with('images')->latest()->get();
@@ -37,11 +69,10 @@ class ProjectController extends Controller
 
     public function store(StoreProjectRequest $request)
     {
-        // 1. Handle the Main Cover Image
+        // 1. Handle the Main Cover Image with Compression
         $coverPath = '';
         if ($request->hasFile('cover')) {
-            $path = $request->file('cover')->store('', 'supabase');
-            $coverPath = Storage::disk('supabase')->url($path);
+            $coverPath = $this->processAndStore($request->file('cover'));
         }
 
         // 2. Create the Project
@@ -54,11 +85,10 @@ class ProjectController extends Controller
             'image_path' => $coverPath, 
         ]);
 
-        // 3. Handle the Perspective Gallery
+        // 3. Handle the Perspective Gallery with Compression
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('', 'supabase');
-                $storedPath = Storage::disk('supabase')->url($path);
+                $storedPath = $this->processAndStore($image);
                 $project->images()->create(['path' => $storedPath]);
             }
         }
@@ -79,11 +109,10 @@ class ProjectController extends Controller
             'description' => $request->description,
         ]);
 
-        // Handle new perspective uploads
+        // Handle new perspective uploads with compression
         if ($request->hasFile('new_images')) {
             foreach ($request->file('new_images') as $image) {
-                $path = $image->store('', 'supabase');
-                $storedPath = Storage::disk('supabase')->url($path);
+                $storedPath = $this->processAndStore($image);
                 $project->images()->create(['path' => $storedPath]);
             }
         }

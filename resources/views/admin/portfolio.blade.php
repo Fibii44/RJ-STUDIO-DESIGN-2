@@ -122,14 +122,41 @@
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-2">
-                                    <label class="text-[9px] font-black uppercase text-sky-600 ml-2">Main Cover</label>
-                                    <input type="file" name="cover" required class="w-full text-[10px]">
+                                <!-- Main Cover Upload -->
+                                <div class="space-y-2" x-data="{ coverPreview: null }">
+                                    <label class="text-[9px] font-black uppercase text-sky-600 ml-2">Main Cover Perspective</label>
+                                    <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-sky-100 bg-sky-50/30 overflow-hidden transition-all hover:border-sky-300 cursor-pointer">
+                                        <input type="file" name="cover" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                                               @change="const file = $el.files[0]; if(file) { coverPreview = URL.createObjectURL(file) }">
+                                        
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none" x-show="!coverPreview">
+                                            <svg class="w-6 h-6 text-sky-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                            <p class="text-[8px] font-black uppercase tracking-widest text-sky-600">Select Featured Render</p>
+                                        </div>
+
+                                        <img x-show="coverPreview" :src="coverPreview" class="w-full h-full object-cover">
+                                        
+                                        <!-- Overlay on Hover when image exists -->
+                                        <div x-show="coverPreview" class="absolute inset-0 bg-sky-600/20 opacity-0 group-hover/upload:opacity-100 transition-opacity flex items-center justify-center">
+                                            <span class="px-3 py-1 bg-white text-sky-600 text-[8px] font-black uppercase rounded-full shadow-sm">Change Image</span>
+                                        </div>
+                                    </div>
                                 </div>
 
+                                <!-- Gallery Bundle Upload -->
                                 <div class="space-y-2">
-                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Gallery Bundle</label>
-                                    <input type="file" name="images[]" multiple required class="w-full text-[10px]">
+                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Gallery Bundle (Multiple)</label>
+                                    <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/50 overflow-hidden transition-all hover:border-slate-300 cursor-pointer">
+                                        <input type="file" name="images[]" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                                               @change="fileCount = $el.files.length">
+                                        
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
+                                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center mb-2 group-hover/upload:bg-sky-50 transition-colors">
+                                                <svg class="w-4 h-4 text-slate-400 group-hover/upload:text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                            </div>
+                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400 group-hover/upload:text-sky-600" x-text="fileCount > 0 ? fileCount + ' Perspectives Selected' : 'Batch Upload Bundle'"></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
