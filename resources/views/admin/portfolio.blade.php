@@ -3,6 +3,7 @@
         activeCategory: 'All', 
         showUpload: false,
         bundleModal: false,
+        displayLimit: 12,
         fileCount: 0,
         selectedProject: { id: null, title: '', category: '', year: '', images: [] },
         
@@ -17,12 +18,21 @@
                 <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">Randolf Jan's Selected Works</p>
             </div>
             
-            <button @click="showUpload = !showUpload" 
-                    class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-sky-600 transition shadow-xl">
-                <svg x-show="!showUpload" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                <svg x-show="showUpload" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
-                <span x-text="showUpload ? 'Close Form' : 'Add New Work'"></span>
-            </button>
+            <div class="flex gap-4">
+                <button @click="showUpload = !showUpload" 
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-sky-600 transition shadow-xl">
+                    <svg x-show="!showUpload" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <svg x-show="showUpload" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <span x-text="showUpload ? 'Close Form' : 'Add New Work'"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="flex gap-4 border-b border-slate-100 pb-4 overflow-x-auto scrollbar-hide">
+            <button @click="activeCategory = 'All'; displayLimit = 12" :class="activeCategory === 'All' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" class="text-[10px] font-black uppercase tracking-widest pb-4 -mb-4.5 transition-all outline-none">All Categories</button>
+            <button @click="activeCategory = 'Design'; displayLimit = 12" :class="activeCategory === 'Design' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" class="text-[10px] font-black uppercase tracking-widest pb-4 -mb-4.5 transition-all outline-none">Design</button>
+            <button @click="activeCategory = 'Construction'; displayLimit = 12" :class="activeCategory === 'Construction' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" class="text-[10px] font-black uppercase tracking-widest pb-4 -mb-4.5 transition-all outline-none">Construction</button>
         </div>
 
         <template x-teleport="body">
@@ -30,7 +40,6 @@
                  x-cloak
                  class="fixed inset-0 z-[200] flex items-center justify-center p-6 md:p-12">
                 
-                <!-- Backdrop -->
                 <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-xl transition-opacity duration-500" 
                      @click="showUpload = false"
                      x-show="showUpload"
@@ -41,7 +50,6 @@
                      x-transition:leave-start="opacity-100"
                      x-transition:leave-end="opacity-0"></div>
 
-                <!-- Modal Content -->
                 <div class="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl border border-white/20 overflow-hidden flex flex-col"
                      x-show="showUpload"
                      x-transition:enter="ease-out duration-500"
@@ -99,7 +107,6 @@
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Custom Cover Upload -->
                                 <div class="space-y-2" x-data="{ coverPreview: null }">
                                     <label class="text-[9px] font-black uppercase text-sky-600 ml-2">Main Cover</label>
                                     <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-sky-100 bg-sky-50/30 overflow-hidden transition-all hover:border-sky-300">
@@ -113,7 +120,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Custom Perspectives Upload -->
                                 <div class="space-y-2">
                                     <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Gallery Bundle</label>
                                     <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/50 overflow-hidden transition-all hover:border-slate-300">
@@ -129,7 +135,6 @@
                         </div>
                     </form>
 
-                    <!-- Fixed Footer -->
                     <div class="p-8 lg:p-10 pt-6 border-t border-slate-50 flex justify-end bg-white">
                         <button type="submit" form="uploadProjectForm" class="px-10 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl">
                             Complete Project
@@ -139,22 +144,19 @@
             </div>
         </template>
 
-        <div class="flex items-center gap-4 bg-slate-100/50 p-1.5 rounded-2xl w-fit">
-            <button @click="activeCategory = 'All'" :class="activeCategory === 'All' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">All Works</button>
-            <button @click="activeCategory = 'Design'" :class="activeCategory === 'Design' ? 'bg-white text-sky-600 shadow-sm' : 'text-slate-500'" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Design</button>
-            <button @click="activeCategory = 'Construction'" :class="activeCategory === 'Construction' ? 'bg-white text-sky-600 shadow-sm' : 'text-slate-500'" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Construction</button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @foreach($projects as $project)
+        <!-- Projects Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @foreach($projects as $index => $project)
                 <div class="group bg-white rounded-[2.5rem] p-4 border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1"
-                     x-show="activeCategory === 'All' || activeCategory === '{{ $project->category }}'"
+                     x-show="(activeCategory === 'All' || activeCategory === '{{ $project->category }}') && {{ $index }} < displayLimit"
                      x-transition.scale.95>
                     
-                    <div class="aspect-[16/10] rounded-[1.8rem] overflow-hidden mb-5 relative">
-                        <img src="{{ asset($project->image_path) }}" class="object-cover w-full h-full group-hover:scale-105 transition-all duration-700">
+                    <div class="aspect-[16/10] rounded-[1.8rem] overflow-hidden mb-5 relative bg-slate-50">
+                        <img src="{{ asset($project->image_path) }}" 
+                             loading="lazy"
+                             class="object-cover w-full h-full group-hover:scale-105 transition-all duration-700">
                         <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                            <button @click="openBundle({{ $project->load('images')->toJson() }})" class="w-12 h-12 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-sky-600 hover:text-white transition-all shadow-lg">
+                            <button @click="openBundle({{ $project->toJson() }})" class="w-12 h-12 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-sky-600 hover:text-white transition-all shadow-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg>
                             </button>
 
@@ -169,7 +171,7 @@
 
                     <div class="px-2 pb-2">
                         <div class="flex items-center justify-between mb-1">
-                            <h4 class="font-serif text-lg text-slate-900">{{ $project->title }}</h4>
+                            <h4 class="font-serif text-lg text-slate-900 line-clamp-1">{{ $project->title }}</h4>
                             <span class="text-[10px] font-black text-slate-300">{{ $project->year }}</span>
                         </div>
                         <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest">{{ $project->category }}</p>
@@ -177,6 +179,15 @@
                 </div>
             @endforeach
         </div>
+
+        <!-- Load More Admin -->
+        @if($projects->count() > 12)
+        <div class="mt-12 flex justify-center" x-show="displayLimit < {{ $projects->count() }}">
+            <button @click="displayLimit += 12" class="px-10 py-4 bg-white border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-sky-600 hover:border-sky-100 transition-all shadow-sm">
+                Load More Projects
+            </button>
+        </div>
+        @endif
 
         <template x-teleport="body">
             <div x-show="bundleModal" x-cloak class="fixed inset-0 z-[250] flex items-center justify-center p-6 md:p-12">
