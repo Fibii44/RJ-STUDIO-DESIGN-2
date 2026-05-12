@@ -37,7 +37,7 @@
                    x-transition:enter="transition ease-out duration-300"
                    x-transition:enter-start="opacity-0"
                    x-transition:enter-end="opacity-100"
-                   class="px-4 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Overview</p>
+                   class="px-4 text-[9px] font-black text-slate-400 tracking-[0.2em] mb-4">Overview</p>
                 <x-sidebar-link href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('home') }}" :active="request()->routeIs('admin.dashboard') || request()->routeIs('home')" icon="dashboard">
                     Dashboard
                 </x-sidebar-link>
@@ -49,7 +49,7 @@
                    x-transition:enter="transition ease-out duration-300"
                    x-transition:enter-start="opacity-0"
                    x-transition:enter-end="opacity-100"
-                   class="px-4 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Consultation</p>
+                   class="px-4 text-[9px] font-black text-slate-400 tracking-[0.2em] mb-4">Consultation</p>
                 <x-sidebar-link href="{{ Auth::user()->role === 'admin' ? route('admin.appointments.index') : route('client.appointments') }}" :active="request()->routeIs('admin.appointments.*') || request()->routeIs('client.appointments')" icon="calendar">
                     Appointments
                 </x-sidebar-link>
@@ -72,7 +72,7 @@
                        x-transition:enter="transition ease-out duration-300"
                        x-transition:enter-start="opacity-0"
                        x-transition:enter-end="opacity-100"
-                       class="px-4 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Studio Registry</p>
+                       class="px-4 text-[9px] font-black text-slate-400 tracking-[0.2em] mb-4">Studio Registry</p>
                     <x-sidebar-link href="{{ route('admin.clients.index') }}" :active="request()->routeIs('admin.clients.*')" icon="admin">
                         Clients
                     </x-sidebar-link>
@@ -91,7 +91,7 @@
                x-transition:enter="transition ease-out duration-300"
                x-transition:enter-start="opacity-0"
                x-transition:enter-end="opacity-100"
-               class="px-4 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Assistance</p>
+               class="px-4 text-[9px] font-black text-slate-400 tracking-[0.2em] mb-4">Assistance</p>
             <x-sidebar-link href="{{ route('support') }}" :active="request()->routeIs('support')" icon="admin">
                 Help & Support
             </x-sidebar-link>

@@ -42,7 +42,7 @@ $classes = ($active ?? false)
                 @break
         @endswitch
     </div>
-    <span x-show="sidebarOpen" x-transition.opacity.duration.300ms class="text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
+    <span x-show="sidebarOpen" x-transition.opacity.duration.300ms class="text-[10px] font-black tracking-widest whitespace-nowrap">
         {{ $slot }}
     </span>
 </a>

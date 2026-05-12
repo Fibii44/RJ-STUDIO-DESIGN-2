@@ -20,9 +20,9 @@ class StoreProjectRequest extends FormRequest
             'year'        => 'required|digits:4', 
             'location'    => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'cover'       => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
-            'images'      => 'nullable|array',
-            'images.*'    => 'image|mimes:jpeg,png,jpg,webp|max:10240',
+            'cover'       => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'images'      => 'nullable|array|max:5',
+            'images.*'    => 'image|mimes:jpeg,png,jpg,webp|max:5120',
         ];
     }
 

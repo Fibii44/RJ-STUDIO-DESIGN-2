@@ -59,7 +59,9 @@
     <body class="font-sans antialiased text-slate-900 bg-slate-50 selection:bg-sky-500/30">
         <div x-data="{ sidebarOpen: true }" class="flex min-h-screen">
             @auth
-                <x-sidebar />
+                @if(request()->routeIs('admin.*') || request()->routeIs('home') || request()->routeIs('client.*') || request()->routeIs('support'))
+                    <x-sidebar />
+                @endif
             @endauth
 
             <div class="flex-1 flex flex-col transition-all duration-500"

@@ -6,6 +6,12 @@ use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        return Auth::user()->role === 'admin' 
+            ? redirect()->route('admin.dashboard') 
+            : redirect()->route('home');
+    }
+
     $featuredProjects = \App\Models\Project::where('category', 'Design')
         ->latest()
         ->take(3)
@@ -21,7 +27,7 @@ Route::get('/portfolio/{project}', [ProjectController::class, 'show'])->name('po
 
 
 //Client Route
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'client'])->group(function () {
     Route::get('/client/dashboard', function () {
         // Get the logged-in user's appointments
         $appointments = Auth::user()->appointments()->orderBy('appointment_date', 'asc')->get();

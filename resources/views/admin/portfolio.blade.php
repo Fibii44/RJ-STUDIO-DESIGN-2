@@ -7,7 +7,7 @@
         fileCount: 0,
         isUploading: false,
         selectedProject: { id: null, title: "", category: "", year: "", images: [] },
-        allProjects: @json($projects),
+        allProjects: @json($projects->items()),
 
         get filteredProjects() {
             if (this.activeCategory === "All") return this.allProjects;
@@ -210,21 +210,10 @@
             </template>
         </div>
 
-        <!-- Load More Admin -->
-        <div class="mt-12 flex justify-center" x-show="displayLimit < filteredProjects.length">
-            <button @click="displayLimit += 8" class="px-10 py-4 bg-white border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-sky-600 shadow-sm">
-                Load More Projects
-            </button>
+        <!-- Studio Styled Pagination -->
+        <div class="mt-12 py-8 border-t border-slate-50">
+            {{ $projects->links() }}
         </div>
-
-        <!-- Load More Admin -->
-        @if($projects->count() > 12)
-        <div class="mt-12 flex justify-center" x-show="displayLimit < {{ $projects->count() }}">
-            <button @click="displayLimit += 12" class="px-10 py-4 bg-white border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-sky-600 hover:border-sky-100 transition-all shadow-sm">
-                Load More Projects
-            </button>
-        </div>
-        @endif
 
         <template x-teleport="body">
             <div x-show="bundleModal" x-cloak class="fixed inset-0 z-[250] flex items-center justify-center p-6 md:p-12">

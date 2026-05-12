@@ -14,33 +14,33 @@ use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 class ProjectController extends Controller
 {
     /**
-     * Private helper to compress and resize images before Supabase upload
+     * Compress, resize, and upload image to Supabase.
+     * Memory is explicitly freed after each call.
      */
-    private function processAndStore($file)
+    private function processAndStore($file): string
     {
-        // 1. Initialize Image Manager with GD driver
         $manager = new ImageManager(new GdDriver());
         
-        // 2. Read the image
-        $image = $manager->read($file);
+        // Read & resize to max 1800px wide — safe for free-tier server RAM
+        $image = $manager->read($file->getRealPath());
         
-        // 3. Professional Resize: Scale to 2000px width (maintaining aspect ratio)
-        // This is the standard for high-end architectural displays
-        if ($image->width() > 2000) {
-            $image->scale(width: 2000);
+        if ($image->width() > 1800) {
+            $image->scale(width: 1800);
         }
         
-        // 4. Optimization: Encode to Progressive JPEG at 80% quality
-        // This reduces file size by up to 90% without visible quality loss
-        $encoded = $image->toJpeg(80);
-        
-        // 5. Unique Filename
+        // Encode at 78% quality — professional quality, ~70% smaller file
+        $encoded = $image->toJpeg(78);
         $filename = 'arch_' . time() . '_' . uniqid() . '.jpg';
         
-        // 6. Upload to Supabase
+        // Upload to Supabase
         Storage::disk('supabase')->put($filename, (string) $encoded);
+        $url = Storage::disk('supabase')->url($filename);
         
-        return Storage::disk('supabase')->url($filename);
+        // CRITICAL: Free memory immediately after each image
+        unset($image, $encoded, $manager);
+        gc_collect_cycles();
+        
+        return $url;
     }
 
     public function index()
@@ -63,7 +63,8 @@ class ProjectController extends Controller
 
     public function adminIndex()
     {
-        $projects = Project::with('images')->latest()->get(); 
+        // Use pagination to keep browser memory light and prevent "Aw Snap" crashes
+        $projects = Project::with('images')->latest()->paginate(12); 
         return view('admin.portfolio', compact('projects'));
     }
 

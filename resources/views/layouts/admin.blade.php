@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RJ Studio | Admin</title>
+    <link rel="icon" type="image/webp" href="{{ asset('/images/Rj-logo.webp') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased text-slate-900 bg-slate-50 selection:bg-sky-500/30">
@@ -15,8 +16,24 @@
         <div class="flex-1 flex flex-col transition-all duration-500"
              :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
             
-            <header class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center px-8 sticky top-0 z-50">
+            <header class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-50">
                  <h2 class="text-sm font-black uppercase tracking-[0.3em] text-slate-900">Admin Control Center</h2>
+                 
+                 <div class="flex items-center gap-6">
+                    <div class="flex flex-col items-end">
+                        <span class="text-[10px] font-black uppercase text-slate-400 leading-none">Logged in as</span>
+                        <span class="text-xs font-bold text-slate-900">{{ Auth::user()->name }}</span>
+                    </div>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="p-2.5 rounded-xl bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </button>
+                    </form>
+                 </div>
             </header>
 
             <main class="p-8 flex-1">
