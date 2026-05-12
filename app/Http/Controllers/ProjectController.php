@@ -19,28 +19,36 @@ class ProjectController extends Controller
      */
     private function processAndStore($file): string
     {
-        $manager = new ImageManager(new GdDriver());
-        
-        // Read & resize to max 1800px wide — safe for free-tier server RAM
-        $image = $manager->read($file->getRealPath());
-        
-        if ($image->width() > 1800) {
-            $image->scale(width: 1800);
+        try {
+            $manager = new ImageManager(new GdDriver());
+            
+            // Read & resize to max 1800px wide
+            $image = $manager->read($file->getRealPath());
+            
+            if ($image->width() > 1800) {
+                $image->scale(width: 1800);
+            }
+            
+            // Encode at 78% quality
+            $encoded = $image->toJpeg(78);
+            $filename = 'arch_' . time() . '_' . uniqid() . '.jpg';
+            
+            // Upload optimized version
+            Storage::disk('supabase')->put($filename, (string) $encoded);
+            $url = Storage::disk('supabase')->url($filename);
+            
+            // Free memory
+            unset($image, $encoded, $manager);
+            gc_collect_cycles();
+            
+            return $url;
+            
+        } catch (\Throwable $e) {
+            // FALLBACK: If GD fails (missing extension or out of memory), upload the original file
+            $filename = 'arch_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            Storage::disk('supabase')->putFileAs('', $file, $filename);
+            return Storage::disk('supabase')->url($filename);
         }
-        
-        // Encode at 78% quality — professional quality, ~70% smaller file
-        $encoded = $image->toJpeg(78);
-        $filename = 'arch_' . time() . '_' . uniqid() . '.jpg';
-        
-        // Upload to Supabase
-        Storage::disk('supabase')->put($filename, (string) $encoded);
-        $url = Storage::disk('supabase')->url($filename);
-        
-        // CRITICAL: Free memory immediately after each image
-        unset($image, $encoded, $manager);
-        gc_collect_cycles();
-        
-        return $url;
     }
 
     public function index()
