@@ -21,13 +21,12 @@
         <div class="flex-1 flex flex-col"
              :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
             
-            <header class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-50">
-                 <h2 class="text-sm font-black uppercase tracking-[0.3em] text-slate-900">Admin Control Center</h2>
+            <header class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-end px-8 sticky top-0 z-50">
                  
                  <div class="flex items-center gap-6">
                     <div class="flex flex-col items-end">
-                        <span class="text-[10px] font-black uppercase text-slate-400 leading-none">Logged in as</span>
-                        <span class="text-xs font-bold text-slate-900">{{ Auth::user()->name }}</span>
+                        <span class="text-[9px] font-black uppercase text-sky-600 leading-none tracking-[0.2em] mb-1">{{ Auth::user()->role }}</span>
+                        <span class="text-[11px] font-bold text-slate-900 uppercase tracking-widest">{{ Auth::user()->name }}</span>
                     </div>
 
                     <form method="POST" action="{{ route('logout') }}">

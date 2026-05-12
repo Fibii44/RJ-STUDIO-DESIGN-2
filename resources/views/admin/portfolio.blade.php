@@ -1,6 +1,7 @@
 <x-admin-layout>
     <div class="space-y-8" x-effect="document.body.style.overflow = (showUpload || bundleModal || deleteModal) ? 'hidden' : ''" x-data='{ 
         activeCategory: "All", 
+        activeYear: "All",
         showUpload: false,
         bundleModal: false,
         deleteModal: false,
@@ -13,9 +14,17 @@
         imageToDelete: null,
         allProjects: @json($projects->items()),
 
+        get availableYears() {
+            const years = [...new Set(this.allProjects.map(p => p.year))].sort((a, b) => b - a);
+            return ["All", ...years];
+        },
+
         get filteredProjects() {
-            if (this.activeCategory === "All") return this.allProjects;
-            return this.allProjects.filter(p => p.category === this.activeCategory);
+            return this.allProjects.filter(p => {
+                const categoryMatch = this.activeCategory === "All" || p.category === this.activeCategory;
+                const yearMatch = this.activeYear === "All" || p.year.toString() === this.activeYear.toString();
+                return categoryMatch && yearMatch;
+            });
         },
 
         get displayedProjects() {
@@ -56,13 +65,39 @@
         </div>
 
         <!-- Filter Bar -->
-        <div class="flex gap-4 border-b border-slate-100 pb-4 overflow-x-auto scrollbar-hide">
-            <template x-for="cat in ['All', 'Design', 'Construction']">
-                <button @click="activeCategory = cat; displayLimit = 8" 
-                        :class="activeCategory === cat ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                        class="text-[10px] font-black uppercase tracking-widest pb-4 -mb-4.5 transition-all outline-none"
-                        x-text="cat === 'All' ? 'All Categories' : cat"></button>
-            </template>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-100 mb-10 pb-4">
+            <div class="flex gap-10 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <template x-for="cat in ['All', 'Design', 'Construction']">
+                    <button @click="activeCategory = cat; displayLimit = 8" 
+                            :class="activeCategory === cat ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
+                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 transition-all outline-none"
+                            x-text="cat === 'All' ? 'All Projects' : (cat === 'Design' ? 'Architectural Design' : cat)"></button>
+                </template>
+            </div>
+
+            <div class="relative" x-data="{ yearOpen: false }">
+                <button @click="yearOpen = !yearOpen" 
+                        class="flex items-center gap-3 bg-white p-2.5 px-5 rounded-2xl border border-slate-200 hover:border-sky-200 hover:shadow-sm transition-all outline-none">
+                    <span class="text-[8px] font-black uppercase tracking-widest text-slate-400">Filter Year</span>
+                    <span class="text-[10px] font-black text-sky-600" x-text="activeYear"></span>
+                    <svg class="w-3 h-3 text-slate-400 transition-transform" :class="yearOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="yearOpen" 
+                     @click.away="yearOpen = false"
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                     class="absolute right-0 mt-2 w-32 bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 z-[100] grid gap-1">
+                    <template x-for="year in availableYears">
+                        <button @click="activeYear = year; displayLimit = 8; yearOpen = false" 
+                                :class="activeYear.toString() === year.toString() ? 'bg-sky-50 text-sky-600' : 'text-slate-500 hover:bg-slate-50'" 
+                                class="w-full text-left px-4 py-2 rounded-xl text-[10px] font-black transition-all"
+                                x-text="year"></button>
+                    </template>
+                </div>
+            </div>
         </div>
 
         <template x-teleport="body">

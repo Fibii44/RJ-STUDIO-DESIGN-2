@@ -24,7 +24,7 @@
         }
     }'>
         <!-- Navigation Context -->
-        <div class="pt-32 px-4 lg:px-8 relative flex items-center justify-center min-h-[40px]">
+        <div class="{{ Auth::check() ? 'pt-12' : 'pt-32' }} px-4 lg:px-8 relative flex items-center justify-center min-h-[40px]">
             <!-- Back Button (Absolute Left) -->
             <div class="absolute left-4 lg:left-8">
                 <a href="{{ route('portfolio') }}" class="inline-flex items-center gap-3 group text-slate-400 hover:text-sky-600 transition-all duration-300">
@@ -79,7 +79,7 @@
                         </div>
                         <div class="space-y-2">
                             <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Project Location</p>
-                            <p class="font-serif text-3xl text-slate-900 leading-tight">{{ $project->location ?? 'Design Studio' }}</p>
+                            <p class="font-serif text-3xl text-slate-900 leading-tight">{{ $project->location ?? 'N/A' }}</p>
                         </div>
                     </div>
                 </div>
