@@ -155,7 +155,7 @@
                 <div class="group bg-white rounded-[2.5rem] p-4 border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
                     
                     <div class="aspect-[16/10] rounded-[1.8rem] overflow-hidden mb-5 relative bg-slate-50">
-                        <img :src="'/' + project.image_path" 
+                        <img :src="project.image_path" 
                              loading="lazy"
                              class="object-cover w-full h-full group-hover:scale-105 transition-all duration-700">
                         <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
