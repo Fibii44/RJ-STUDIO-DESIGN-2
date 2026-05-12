@@ -92,14 +92,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="group cursor-pointer">
                             <div class="aspect-video rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
-                                <img src="https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                                <img src="https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover transition-all duration-700">
                             </div>
                             <h4 class="font-serif text-xl text-slate-900">Floor Plan - L01</h4>
                             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">Blueprint &bull; PDF</p>
                         </div>
                         <div class="group cursor-pointer">
                             <div class="aspect-video rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
-                                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover transition-all duration-700">
                             </div>
                             <h4 class="font-serif text-xl text-slate-900">Landscape Plan</h4>
                             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">Blueprint &bull; PDF</p>

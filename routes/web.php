@@ -6,7 +6,11 @@ use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $featuredProjects = \App\Models\Project::where('category', 'Design')
+        ->latest()
+        ->take(3)
+        ->get();
+    return view('welcome', compact('featuredProjects'));
 });
 
 Route::view('/about-studio', 'about-studio')->name('about-studio');
@@ -43,8 +47,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Admin Route Group
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
+        $totalUsers = \App\Models\User::where('role', '!=', 'admin')->count();
+        $totalProjects = \App\Models\Project::count();
+        $totalAppointments = \App\Models\Appointment::count();
+        
+        // Find if there's any pending or upcoming appointment
+        $ongoingAppointment = \App\Models\Appointment::where('status', 'pending')
+            ->orWhere('status', 'confirmed')
+            ->latest('appointment_date')
+            ->first();
+
+        return view('admin.dashboard', compact('totalUsers', 'totalProjects', 'totalAppointments', 'ongoingAppointment'));
     })->name('admin.dashboard');
+
+    // --- Appointment Management Routes ---
+    Route::get('/admin/appointments', [AppointmentController::class, 'index'])->name('admin.appointments.index');
 
     // --- Portfolio Management Routes ---
     Route::get('/admin/portfolio', [ProjectController::class, 'adminIndex'])->name('admin.portfolio.index');

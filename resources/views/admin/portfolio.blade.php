@@ -42,7 +42,7 @@
                      x-transition:leave-end="opacity-0"></div>
 
                 <!-- Modal Content -->
-                <div class="relative bg-white w-full max-w-4xl p-8 lg:p-10 rounded-[3rem] shadow-2xl border border-white/20 overflow-hidden"
+                <div class="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl border border-white/20 overflow-hidden flex flex-col"
                      x-show="showUpload"
                      x-transition:enter="ease-out duration-500"
                      x-transition:enter-start="opacity-0 scale-95 translate-y-8"
@@ -52,7 +52,7 @@
                      x-transition:leave-end="opacity-0 scale-95 translate-y-8"
                      @click.stop>
                     
-                    <div class="flex justify-between items-start mb-8">
+                    <div class="p-8 lg:p-10 pb-6 flex justify-between items-start border-b border-slate-50">
                         <div class="space-y-1">
                             <h4 class="font-serif text-3xl text-slate-900">Upload <span class="italic text-sky-600">Project</span></h4>
                             <p class="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em]">Curation • Architectural Bundle</p>
@@ -62,73 +62,79 @@
                         </button>
                     </div>
                     
-                    <form action="{{ route('admin.portfolio.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form id="uploadProjectForm" action="{{ route('admin.portfolio.store') }}" method="POST" enctype="multipart/form-data" class="flex-1 overflow-y-auto p-8 lg:p-10 custom-scrollbar" x-data="{ desc: '' }">
                         @csrf
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="md:col-span-2 space-y-1.5">
-                                <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Project Title</label>
-                                <input type="text" name="title" required placeholder="Ex: Minimalist Glass Villa" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
-                            </div>
-                            <div class="space-y-1.5">
-                                <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Category</label>
-                                <select name="category" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4">
-                                    <option value="Design">Architectural Design</option>
-                                    <option value="Construction">Construction Management</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="md:col-span-2 space-y-1.5">
-                                <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Location (Optional)</label>
-                                <input type="text" name="location" placeholder="Ex: Bukidnon, Philippines" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
-                            </div>
-                            <div class="space-y-1.5">
-                                <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Release Year</label>
-                                <input type="number" name="year" value="{{ date('Y') }}" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
-                            </div>
-                        </div>
-
-                        <div class="space-y-1.5">
-                            <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Concept Description (Optional)</label>
-                            <textarea name="description" rows="2" placeholder="Briefly describe the architectural vision..." class="w-full rounded-2xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs p-4"></textarea>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Custom Cover Upload -->
-                            <div class="space-y-2" x-data="{ coverPreview: null }">
-                                <label class="text-[9px] font-black uppercase text-sky-600 ml-2">Main Cover</label>
-                                <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-sky-100 bg-sky-50/30 overflow-hidden transition-all hover:border-sky-300">
-                                    <input type="file" name="cover" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                                           @change="const file = $el.files[0]; if(file) { coverPreview = URL.createObjectURL(file) }">
-                                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none" x-show="!coverPreview">
-                                        <svg class="w-5 h-5 text-sky-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                        <p class="text-[8px] font-black uppercase tracking-widest text-sky-700">Set Cover</p>
-                                    </div>
-                                    <img x-show="coverPreview" :src="coverPreview" class="w-full h-full object-cover">
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="md:col-span-2 space-y-1.5">
+                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Project Title</label>
+                                    <input type="text" name="title" required placeholder="Ex: Minimalist Glass Villa" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Category</label>
+                                    <select name="category" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4">
+                                        <option value="Design">Architectural Design</option>
+                                        <option value="Construction">Construction Management</option>
+                                    </select>
                                 </div>
                             </div>
 
-                            <!-- Custom Perspectives Upload -->
-                            <div class="space-y-2">
-                                <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Gallery Bundle</label>
-                                <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/50 overflow-hidden transition-all hover:border-slate-300">
-                                    <input type="file" name="images[]" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                                           @change="fileCount = $el.files.length">
-                                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
-                                        <svg class="w-5 h-5 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11l-8 8-4-4m0 0l-4 4m4-4l4 4m4-4l4 4"/></svg>
-                                        <p class="text-[8px] font-black uppercase tracking-widest text-slate-700" x-text="fileCount > 0 ? fileCount + ' Files' : 'Gallery'"></p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="md:col-span-2 space-y-1.5">
+                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Location (Optional)</label>
+                                    <input type="text" name="location" placeholder="Ex: Bukidnon, Philippines" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Release Year</label>
+                                    <input type="number" name="year" value="{{ date('Y') }}" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between items-center px-2">
+                                    <label class="text-[9px] font-black uppercase text-slate-400">Concept Description (Optional)</label>
+                                    <span class="text-[8px] font-bold" :class="desc.length > 900 ? 'text-red-500' : 'text-slate-400'" x-text="desc.length + ' / 1000'"></span>
+                                </div>
+                                <textarea name="description" x-model="desc" maxlength="1000" rows="3" placeholder="Briefly describe the architectural vision..." class="w-full rounded-2xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs p-4 min-h-[80px] max-h-[160px]"></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Custom Cover Upload -->
+                                <div class="space-y-2" x-data="{ coverPreview: null }">
+                                    <label class="text-[9px] font-black uppercase text-sky-600 ml-2">Main Cover</label>
+                                    <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-sky-100 bg-sky-50/30 overflow-hidden transition-all hover:border-sky-300">
+                                        <input type="file" name="cover" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                                               @change="const file = $el.files[0]; if(file) { coverPreview = URL.createObjectURL(file) }">
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none" x-show="!coverPreview">
+                                            <svg class="w-5 h-5 text-sky-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                            <p class="text-[8px] font-black uppercase tracking-widest text-sky-700">Set Cover</p>
+                                        </div>
+                                        <img x-show="coverPreview" :src="coverPreview" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+
+                                <!-- Custom Perspectives Upload -->
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Gallery Bundle</label>
+                                    <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/50 overflow-hidden transition-all hover:border-slate-300">
+                                        <input type="file" name="images[]" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                                               @change="fileCount = $el.files.length">
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
+                                            <svg class="w-5 h-5 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11l-8 8-4-4m0 0l-4 4m4-4l4 4m4-4l4 4"/></svg>
+                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-700" x-text="fileCount > 0 ? fileCount + ' Files' : 'Gallery'"></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="pt-4 border-t border-slate-50 flex justify-end">
-                            <button type="submit" class="px-10 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl">
-                                Complete Project
-                            </button>
                         </div>
                     </form>
+
+                    <!-- Fixed Footer -->
+                    <div class="p-8 lg:p-10 pt-6 border-t border-slate-50 flex justify-end bg-white">
+                        <button type="submit" form="uploadProjectForm" class="px-10 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl">
+                            Complete Project
+                        </button>
+                    </div>
                 </div>
             </div>
         </template>
@@ -146,7 +152,7 @@
                      x-transition.scale.95>
                     
                     <div class="aspect-[16/10] rounded-[1.8rem] overflow-hidden mb-5 relative">
-                        <img src="{{ asset($project->image_path) }}" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700">
+                        <img src="{{ asset($project->image_path) }}" class="object-cover w-full h-full group-hover:scale-105 transition-all duration-700">
                         <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
                             <button @click="openBundle({{ $project->load('images')->toJson() }})" class="w-12 h-12 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-sky-600 hover:text-white transition-all shadow-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg>
@@ -176,7 +182,7 @@
             <div x-show="bundleModal" x-cloak class="fixed inset-0 z-[250] flex items-center justify-center p-6 md:p-12">
                 <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-xl transition-opacity duration-500" @click="bundleModal = false"></div>
                 
-                <div class="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-[3.5rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-white/20" @click.stop>
+                <div class="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-white/20" @click.stop>
                     
                     <!-- Left: Bundle Preview -->
                     <div class="flex-1 p-8 lg:p-12 overflow-y-auto custom-scrollbar bg-slate-50/30">
@@ -193,7 +199,7 @@
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                             <template x-for="img in selectedProject.images" :key="img.id">
                                 <div class="group/img relative aspect-square rounded-[2rem] overflow-hidden bg-white border-2 border-white shadow-premium transition-all hover:shadow-2xl">
-                                    <img :src="img.path" class="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-700">
+                                    <img :src="img.path" class="w-full h-full object-cover transition-all duration-700">
                                     <div class="absolute inset-0 bg-red-600/90 opacity-0 group-hover/img:opacity-100 transition-all flex items-center justify-center backdrop-blur-sm">
                                         <form :action="'/admin/portfolio/image/' + img.id" method="POST">
                                             @csrf @method('DELETE')
@@ -208,73 +214,79 @@
                     </div>
 
                     <!-- Right: Edit Details -->
-                    <div class="w-full lg:w-[450px] p-8 lg:p-12 flex flex-col bg-white border-l border-slate-100 overflow-y-auto custom-scrollbar">
-                        <div class="flex justify-between items-start mb-8">
-                            <h2 class="text-3xl font-serif text-slate-900 leading-tight">Edit <span class="text-sky-600 italic">Project</span></h2>
-                            <button @click="bundleModal = false" class="hidden lg:flex w-10 h-10 rounded-full bg-slate-50 items-center justify-center hover:bg-red-500 hover:text-white transition-all text-slate-400">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </button>
-                        </div>
-
-                        <form :action="`/admin/portfolio/${selectedProject.id}`" method="POST" class="space-y-6">
+                    <div class="w-full lg:w-[450px] flex flex-col bg-white border-l border-slate-100 overflow-hidden">
+                        <form :action="`/admin/portfolio/${selectedProject.id}`" method="POST" enctype="multipart/form-data" class="flex-1 flex flex-col h-full">
                             @csrf @method('PATCH')
-                            <div class="space-y-1.5">
-                                <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Project Title</label>
-                                <input type="text" name="title" x-model="selectedProject.title" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4 focus:ring-4 focus:ring-sky-500/10 transition-all">
+                            
+                            <!-- Header -->
+                            <div class="p-8 lg:p-10 pb-6 flex justify-between items-start border-b border-slate-50/50">
+                                <h2 class="text-2xl font-serif text-slate-900 leading-tight">Edit <span class="text-sky-600 italic">Project</span></h2>
+                                <button type="button" @click="bundleModal = false" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all text-slate-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4">
+                            <!-- Scrollable Body -->
+                            <div class="flex-1 overflow-y-auto p-8 lg:p-10 space-y-6 custom-scrollbar">
                                 <div class="space-y-1.5">
-                                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Year</label>
-                                    <input type="number" name="year" x-model="selectedProject.year" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4 focus:ring-4 focus:ring-sky-500/10 transition-all">
+                                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Project Title</label>
+                                    <input type="text" name="title" x-model="selectedProject.title" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4 focus:ring-4 focus:ring-sky-500/10 transition-all">
                                 </div>
-                                <div class="space-y-1.5">
-                                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Category</label>
-                                    <select name="category" x-model="selectedProject.category" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4">
-                                        <option value="Design">Design</option>
-                                        <option value="Construction">Construction</option>
-                                    </select>
-                                </div>
-                            </div>
 
-                            <div class="space-y-1.5">
-                                <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Location</label>
-                                <input type="text" name="location" x-model="selectedProject.location" placeholder="Ex: Bukidnon, Philippines" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4">
-                            </div>
-
-                            <div class="space-y-1.5">
-                                <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Description</label>
-                                <textarea name="description" x-model="selectedProject.description" rows="3" placeholder="Briefly describe the architectural concept..." class="w-full rounded-2xl border-slate-100 bg-slate-50 text-xs p-4 focus:ring-4 focus:ring-sky-500/10 transition-all"></textarea>
-                            </div>
-
-                            <button type="submit" class="w-full py-4 bg-sky-600 text-white rounded-xl font-bold uppercase text-[9px] tracking-[0.2em] shadow-lg hover:bg-slate-900 transition-all">Update Project Details</button>
-                        </form>
-
-                        <!-- Add More Section -->
-                        <div class="mt-10 pt-8 border-t border-slate-100 space-y-4">
-                            <div class="flex items-center justify-between ml-2">
-                                <h4 class="text-[9px] font-black uppercase text-sky-600 tracking-widest">Add New Perspectives</h4>
-                                <span class="text-[8px] text-slate-400 uppercase font-black" x-text="fileCount > 0 ? fileCount + ' New' : ''"></span>
-                            </div>
-                            <form :action="`/admin/portfolio/${selectedProject.id}/add-images`" method="POST" enctype="multipart/form-data" class="space-y-4">
-                                @csrf
-                                <div class="relative group/add h-24 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-all">
-                                    <input type="file" name="new_images[]" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                           @change="fileCount = $el.files.length">
-                                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                        <svg class="w-5 h-5 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                        <p class="text-[8px] font-black uppercase text-slate-500 tracking-widest">Select Files</p>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1.5">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Year</label>
+                                        <input type="number" name="year" x-model="selectedProject.year" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4 focus:ring-4 focus:ring-sky-500/10 transition-all">
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Category</label>
+                                        <select name="category" x-model="selectedProject.category" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4">
+                                            <option value="Design">Design</option>
+                                            <option value="Construction">Construction</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <button type="submit" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold uppercase text-[9px] tracking-[0.2em]">Upload to Bundle</button>
-                            </form>
-                        </div>
 
-                        <div class="mt-auto pt-8">
-                            <button @click="bundleModal = false" class="w-full py-4 bg-slate-50 text-slate-400 rounded-xl font-bold uppercase text-[9px] tracking-widest hover:bg-sky-600 hover:text-white transition-all">
-                                Done Managing
-                            </button>
-                        </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Location</label>
+                                    <input type="text" name="location" x-model="selectedProject.location" placeholder="Ex: Bukidnon, Philippines" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4">
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <div class="flex justify-between items-center px-2">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-slate-400">Description</label>
+                                        <span class="text-[8px] font-bold" :class="(selectedProject.description?.length || 0) > 900 ? 'text-red-500' : 'text-slate-400'" x-text="(selectedProject.description?.length || 0) + ' / 1000'"></span>
+                                    </div>
+                                    <textarea name="description" x-model="selectedProject.description" maxlength="1000" rows="3" placeholder="Briefly describe the architectural concept..." class="w-full rounded-2xl border-slate-100 bg-slate-50 text-xs p-4 focus:ring-4 focus:ring-sky-500/10 transition-all min-h-[80px] max-h-[160px]"></textarea>
+                                </div>
+
+                                <!-- Add More Perspectives Section -->
+                                <div class="pt-6 border-t border-slate-50 space-y-4">
+                                    <div class="flex items-center justify-between ml-2">
+                                        <h4 class="text-[9px] font-black uppercase text-sky-600 tracking-widest">Add New Perspectives</h4>
+                                        <span class="text-[8px] text-slate-400 uppercase font-black" x-text="fileCount > 0 ? fileCount + ' New Selected' : ''"></span>
+                                    </div>
+                                    <div class="relative group/add h-24 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-all">
+                                        <input type="file" name="new_images[]" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                               @change="fileCount = $el.files.length">
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                            <svg class="w-5 h-5 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                            <p class="text-[8px] font-black uppercase text-slate-500 tracking-widest">Select Files</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer (Sticky/Fixed at bottom of modal) -->
+                            <div class="p-8 lg:p-10 border-t border-slate-50 bg-white space-y-3">
+                                <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-xl font-bold uppercase text-[9px] tracking-[0.2em] shadow-xl hover:bg-sky-600 transition-all">
+                                    Save All Changes
+                                </button>
+                                <button type="button" @click="bundleModal = false" class="w-full py-3 bg-slate-50 text-slate-400 rounded-xl font-bold uppercase text-[9px] tracking-widest hover:bg-slate-100 transition-all">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

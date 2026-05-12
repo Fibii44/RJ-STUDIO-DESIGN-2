@@ -1,101 +1,103 @@
 <x-studio-layout title="{{ $project->title }} | RJ DESIGN STUDIO">
-    <main class="min-h-screen bg-white">
-        <!-- Minimal Header -->
-        <nav class="fixed top-0 left-0 right-0 z-50 px-10 py-8 flex justify-between items-center mix-blend-difference pointer-events-none">
-            <a href="{{ route('portfolio') }}" class="pointer-events-auto group flex items-center gap-4 text-white">
-                <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-500">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l-7-7m7-7H3" /></svg>
-                </div>
-                <span class="text-[10px] font-black uppercase tracking-[0.4em] opacity-0 group-hover:opacity-100 transition-all duration-500">Back to Works</span>
-            </a>
-        </nav>
+    <main class="min-h-screen bg-white" x-data="{ activeImg: '' }">
+        <!-- Project Header -->
+        <header class="pt-32 pb-16 px-6 text-center max-w-4xl mx-auto space-y-6">
+            <div class="flex items-center justify-center gap-3">
+                <span class="text-sky-600 font-black uppercase tracking-[0.4em] text-[9px]">{{ $project->category }}</span>
+            </div>
+            <h1 class="font-serif text-3xl lg:text-5xl text-slate-900 leading-tight tracking-tighter">
+                {{ $project->title }}
+            </h1>
+        </header>
 
-        <!-- Hero Section -->
-        <section class="h-screen relative overflow-hidden bg-slate-900">
-            <img src="{{ asset($project->image_path) }}" class="absolute inset-0 w-full h-full object-cover grayscale opacity-60 scale-105 animate-slow-zoom">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
-            
-            <div class="absolute inset-x-0 bottom-0 p-10 lg:p-24">
-                <div class="max-w-7xl mx-auto space-y-8">
-                    <div class="flex items-center gap-4" x-data="{ loaded: false }" x-init="setTimeout(() => loaded = true, 500)">
-                        <span class="w-3 h-3 rounded-full bg-sky-500 animate-pulse"></span>
-                        <span class="text-sky-400 font-black uppercase tracking-[0.5em] text-[10px]" x-show="loaded" x-transition.opacity>{{ $project->category }}</span>
+        <!-- Cinematic Hero Image -->
+        <section class="px-6 lg:px-12">
+            <div class="aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl bg-slate-100 relative group cursor-zoom-in"
+                 @click="activeImg = {{ json_encode(asset($project->image_path)) }}; $dispatch('open-modal', 'gallery-viewer')">
+                <img src="{{ asset($project->image_path) }}" class="w-full h-full object-cover transition-transform duration-[30s] ease-linear group-hover:scale-110">
+                <div class="absolute inset-0 bg-slate-900/5"></div>
+            </div>
+        </section>
+
+        <!-- Project Details Section -->
+        <section class="py-24 lg:py-40 px-6 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20">
+                <!-- Left: Description (Long content) -->
+                <div class="lg:col-span-8 space-y-12">
+                    <div class="space-y-6">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Project Brief & Inclusions</h3>
+                        <p class="text-lg lg:text-xl font-serif text-slate-700 leading-relaxed whitespace-pre-line">
+                            {{ $project->description ?? 'Every structure tells a story. This project represents the intersection of structural integrity and modern minimalist aesthetics.' }}
+                        </p>
                     </div>
-                    <h1 class="font-serif text-6xl lg:text-9xl text-white leading-none tracking-tighter">
-                        {{ $project->title }}
-                    </h1>
-                    <div class="flex flex-wrap items-center gap-12 pt-8 border-t border-white/10">
-                        <div class="space-y-1">
-                            <p class="text-[9px] font-black text-white/30 uppercase tracking-widest">Architectural Release</p>
-                            <p class="font-serif text-2xl text-white">{{ $project->year }}</p>
+                </div>
+
+                <!-- Right: Meta Info -->
+                <div class="lg:col-span-4 lg:pl-12 space-y-12 border-l border-slate-100">
+                    <div class="grid grid-cols-1 gap-12">
+                        <div class="space-y-2">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Architectural Release</p>
+                            <p class="font-serif text-3xl text-slate-900">{{ $project->year }}</p>
                         </div>
-                        <div class="space-y-1">
-                            <p class="text-[9px] font-black text-white/30 uppercase tracking-widest">Location</p>
-                            <p class="font-serif text-2xl text-white">{{ $project->location ?? 'Design Studio Release' }}</p>
+                        <div class="space-y-2">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Project Location</p>
+                            <p class="font-serif text-3xl text-slate-900 leading-tight">{{ $project->location ?? 'Design Studio' }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Gallery / Perspectives -->
-        <section class="py-32 lg:py-48 px-10">
-            <div class="max-w-7xl mx-auto">
-                <div class="mb-32 max-w-2xl">
-                    <h2 class="text-sm font-black uppercase tracking-[0.4em] text-slate-400 mb-8">Concept Brief</h2>
-                    <p class="text-3xl font-serif text-slate-900 leading-relaxed italic">
-                        "{{ $project->description ?? 'Every structure tells a story. This project represents the intersection of structural integrity and modern minimalist aesthetics, designed to maximize natural perspective.' }}"
-                    </p>
+        <!-- Gallery Showcase -->
+        @if($project->images->count() > 0)
+        <section class="py-32 bg-slate-50 px-6">
+            <div class="max-w-7xl mx-auto space-y-20">
+                <div class="text-center space-y-4">
+                    <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-sky-600">Visual Perspectives</h2>
+                    <h3 class="text-4xl font-serif text-slate-900">Project Gallery</h3>
                 </div>
 
-                <!-- Perspective Mosaic -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-32 lg:gap-y-64">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     @foreach($project->images as $index => $image)
-                        <div class="group {{ $index % 2 != 0 ? 'lg:mt-48' : '' }}" 
-                             x-data="{ visible: false }" 
-                             x-intersect="visible = true">
-                            <div class="relative aspect-[4/5] rounded-[3rem] overflow-hidden bg-slate-50 shadow-premium transition-all duration-700 group-hover:shadow-2xl"
-                                 :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'"
-                                 style="transition-delay: {{ $index * 100 }}ms">
-                                <img src="{{ asset($image->path) }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-100 group-hover:scale-105">
-                                
-                                <div class="absolute top-8 left-8 px-4 py-2 bg-white/40 backdrop-blur-md rounded-full border border-white/20">
-                                    <p class="text-[9px] font-black text-slate-900 uppercase tracking-widest">P. 0{{ $index + 1 }}</p>
-                                </div>
-                            </div>
-                            <div class="mt-10 space-y-3">
-                                <h4 class="text-2xl font-serif text-slate-900 leading-tight">Perspective Analysis</h4>
-                                <p class="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em]">Spatial Detail • {{ $project->year }}</p>
-                            </div>
+                        <div class="group relative rounded-2xl overflow-hidden shadow-sm bg-white border border-slate-100 transition-all duration-700 hover:shadow-2xl cursor-zoom-in"
+                             @click="activeImg = {{ json_encode(asset($image->path)) }}; $dispatch('open-modal', 'gallery-viewer')">
+                            <img src="{{ asset($image->path) }}" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105">
+                            
                         </div>
                     @endforeach
                 </div>
             </div>
         </section>
+        @endif
 
-        <!-- Footer Call to Action -->
-        @guest
-        <section class="py-32 bg-slate-950 text-white text-center">
-            <div class="max-w-4xl mx-auto px-6 space-y-12">
-                <h3 class="text-5xl lg:text-7xl font-serif leading-tight">Inspired by <br> <span class="text-sky-400 italic">this design?</span></h3>
-                <p class="text-slate-400 text-xl leading-relaxed max-w-lg mx-auto">Let's discuss how we can bring a similar architectural perspective to your next project.</p>
-                <div class="pt-8">
-                    <a href="{{ route('services') }}" class="inline-block px-12 py-6 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-sky-400 transition-all shadow-2xl">
-                        Start Your Project Brief
-                    </a>
+        <!-- Universal Gallery Modal (Teleported for Centering) -->
+        <template x-teleport="body">
+            <x-modal name="gallery-viewer" maxWidth="7xl" focusable>
+                <div class="relative flex items-center justify-center p-0 overflow-hidden group">
+                    <div class="relative p-2 rounded-2xl shadow-2xl backdrop-blur-sm border border-white/5 bg-white/5">
+                        <!-- Integrated Close Button -->
+                        <button @click="$dispatch('close-modal', 'gallery-viewer')" 
+                                class="absolute top-6 right-6 w-10 h-10 bg-slate-900/80 hover:bg-red-500 text-white rounded-full flex items-center justify-center transition-all z-[110] shadow-2xl group/close">
+                            <svg class="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                        
+                        <img :src="activeImg" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl">
+                    </div>
                 </div>
+            </x-modal>
+        </template>
+
+        @guest
+        <!-- Simple Footer CTA -->
+        <section class="py-32 bg-white text-center">
+            <div class="max-w-2xl mx-auto px-6 space-y-12">
+                <div class="w-12 h-px bg-slate-200 mx-auto"></div>
+                <h3 class="text-4xl lg:text-6xl font-serif text-slate-900 italic leading-tight">Inspired?</h3>
+                <a href="{{ route('services') }}" class="inline-block px-12 py-5 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-sky-600 transition-all shadow-xl shadow-slate-900/10">
+                    Get in Touch
+                </a>
             </div>
         </section>
         @endguest
     </main>
-
-    <style>
-        @keyframes slow-zoom {
-            from { transform: scale(1.05); }
-            to { transform: scale(1.15); }
-        }
-        .animate-slow-zoom {
-            animation: slow-zoom 20s linear infinite alternate;
-        }
-    </style>
 </x-studio-layout>

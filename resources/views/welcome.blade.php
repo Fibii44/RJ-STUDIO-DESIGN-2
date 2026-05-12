@@ -27,7 +27,7 @@
 
                 <div class="relative group">
                     <div class="aspect-[4/5] rounded-[4rem] overflow-hidden shadow-premium rotate-2 group-hover:rotate-0 transition-all duration-1000 border-[12px] border-white relative z-10 bg-slate-50">
-                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1000" alt="Modern Architecture" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000">
+                        <img src="{{ asset('images/home-pic.webp') }}" alt="Modern Architecture" class="w-full h-full object-cover transition-all duration-1000">
                     </div>
                     <div class="absolute -inset-4 bg-sky-100 rounded-[5rem] -z-0 blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 </div>
@@ -46,24 +46,14 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="space-y-6 group">
+                    @foreach($featuredProjects as $index => $project)
+                    <div class="space-y-6 group {{ $index === 1 ? 'md:translate-y-12' : '' }}">
                         <div class="aspect-square rounded-[3rem] overflow-hidden bg-slate-50 border border-slate-100 shadow-sm group-hover:shadow-xl transition-all duration-500">
-                            <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                            <img src="{{ asset($project->image_path) }}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110">
                         </div>
-                        <h4 class="font-serif text-xl px-4">Modern Villa Concept</h4>
+                        <h4 class="font-serif text-xl px-4">{{ $project->title }}</h4>
                     </div>
-                    <div class="space-y-6 group md:translate-y-12">
-                        <div class="aspect-square rounded-[3rem] overflow-hidden bg-slate-50 border border-slate-100 shadow-sm group-hover:shadow-xl transition-all duration-500">
-                            <img src="https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
-                        </div>
-                        <h4 class="font-serif text-xl px-4">Minimalist Interior</h4>
-                    </div>
-                    <div class="space-y-6 group">
-                        <div class="aspect-square rounded-[3rem] overflow-hidden bg-slate-50 border border-slate-100 shadow-sm group-hover:shadow-xl transition-all duration-500">
-                            <img src="https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
-                        </div>
-                        <h4 class="font-serif text-xl px-4">Urban Residential</h4>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>

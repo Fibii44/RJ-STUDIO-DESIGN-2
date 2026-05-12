@@ -1,10 +1,6 @@
 <x-guest-layout>
-    <div class="mb-8 text-center">
-        <div class="inline-flex items-center justify-center w-12 h-12 bg-sky-600 rounded-xl mb-4 shadow-lg shadow-sky-200">
-            <span class="text-white font-bold text-xl">RJ</span>
-        </div>
-        <h2 class="text-2xl font-serif font-bold text-slate-800">Welcome Back</h2>
-        <p class="text-sm text-slate-500">Access your architectural portal</p>
+    <div class="mb-10 text-center">
+        <h2 class="text-3xl font-serif text-slate-900 leading-tight">Studio <span class="text-sky-600 italic">Access</span></h2>
     </div>
 
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -44,7 +40,7 @@
 
         <div class="mt-8">
             <x-primary-button class="w-full justify-center py-3 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl shadow-lg shadow-sky-100 transition-all border-none">
-                {{ __('Log in to Studio') }}
+                {{ __('Log in') }}
             </x-primary-button>
         </div>
 

@@ -1,7 +1,7 @@
 @guest
 <nav x-data="{ open: false, atTop: true }" 
      @scroll.window="atTop = (window.pageYOffset > 10 ? false : true)"
-     :class="atTop ? 'bg-transparent border-transparent' : 'bg-white/80 backdrop-blur-xl border-slate-100 shadow-lg'"
+     :class="(atTop && !{{ request()->routeIs('projects.show') ? 'true' : 'false' }}) ? 'bg-transparent border-transparent' : 'bg-white/80 backdrop-blur-xl border-slate-100 shadow-lg'"
      class="fixed top-0 left-0 right-0 z-[100] transition-all duration-500 border-b">
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

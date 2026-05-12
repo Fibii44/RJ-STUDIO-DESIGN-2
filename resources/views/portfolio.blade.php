@@ -67,7 +67,7 @@
                          x-transition:enter-end="opacity-100 translate-y-0">
                         
                         <div class="aspect-[16/10] rounded-[2.5rem] overflow-hidden bg-slate-50 relative shadow-sm group-hover:shadow-premium transition-all duration-700 border border-slate-100">
-                            <img src="{{ asset($project->image_path) }}" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105">
+                            <img src="{{ asset($project->image_path) }}" class="object-cover w-full h-full transition-all duration-1000 group-hover:scale-105">
                             
                             <!-- Floating Info Badge (App-style) -->
                             <div class="absolute top-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0 z-20">

@@ -30,28 +30,17 @@
 
     <!-- Navigation -->
     <nav class="p-6 space-y-2">
-        <x-sidebar-link href="{{ route('home') }}" :active="request()->routeIs('home')" icon="dashboard">
+        <x-sidebar-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')" icon="dashboard">
             Dashboard
         </x-sidebar-link>
         
-        <x-sidebar-link href="{{ route('client.appointments') }}" :active="request()->routeIs('client.appointments')" icon="calendar">
+        <x-sidebar-link href="{{ Auth::user()->role === 'admin' ? route('admin.appointments.index') : route('client.appointments') }}" :active="request()->routeIs('admin.appointments.*') || request()->routeIs('client.appointments')" icon="calendar">
             Appointments
         </x-sidebar-link>
 
-        <x-sidebar-link href="{{ route('portfolio') }}" :active="request()->routeIs('portfolio')" icon="portfolio">
-            Portfolio
-        </x-sidebar-link>
-
         @if(Auth::user()->role === 'admin')
-            <div class="pt-8 pb-2 px-4">
-                <p x-show="sidebarOpen" x-transition.opacity class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Administration</p>
-                <div x-show="!sidebarOpen" class="h-px bg-slate-100"></div>
-            </div>
-            <x-sidebar-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')" icon="dashboard">
-                Admin Panel
-            </x-sidebar-link>
             <x-sidebar-link href="{{ route('admin.portfolio.index') }}" :active="request()->routeIs('admin.portfolio.*')" icon="admin">
-                Management
+                Portfolio Management
             </x-sidebar-link>
         @endif
     </nav>

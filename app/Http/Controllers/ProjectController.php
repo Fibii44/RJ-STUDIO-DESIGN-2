@@ -73,7 +73,16 @@ class ProjectController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.portfolio.index')->with('success', 'Project details updated!');
+        // Handle new perspective uploads
+        if ($request->hasFile('new_images')) {
+            foreach ($request->file('new_images') as $image) {
+                $path = $image->store('', 'supabase');
+                $storedPath = Storage::disk('supabase')->url($path);
+                $project->images()->create(['path' => $storedPath]);
+            }
+        }
+
+        return redirect()->route('admin.portfolio.index')->with('success', 'Project bundle updated successfully!');
     }
     /**
      * Add more images to an existing bundle

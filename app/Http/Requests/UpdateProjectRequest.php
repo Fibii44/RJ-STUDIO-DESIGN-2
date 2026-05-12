@@ -19,6 +19,7 @@ class UpdateProjectRequest extends FormRequest
             'category' => 'required|in:Design,Construction',
             'location' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'new_images.*' => 'nullable|image|max:5120',
         ];
     }
 }
