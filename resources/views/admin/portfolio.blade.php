@@ -1,17 +1,28 @@
 <x-admin-layout>
-    <div class="space-y-8" x-data="{ 
-        activeCategory: 'All', 
+    <div class="space-y-8" x-data='{ 
+        activeCategory: "All", 
         showUpload: false,
         bundleModal: false,
-        displayLimit: 12,
+        displayLimit: 8,
         fileCount: 0,
-        selectedProject: { id: null, title: '', category: '', year: '', images: [] },
+        isUploading: false,
+        selectedProject: { id: null, title: "", category: "", year: "", images: [] },
+        allProjects: @json($projects),
+
+        get filteredProjects() {
+            if (this.activeCategory === "All") return this.allProjects;
+            return this.allProjects.filter(p => p.category === this.activeCategory);
+        },
+
+        get displayedProjects() {
+            return this.filteredProjects.slice(0, this.displayLimit);
+        },
         
         openBundle(project) {
             this.selectedProject = project;
             this.bundleModal = true;
         }
-    }">
+    }'>
         <div class="flex items-center justify-between">
             <div class="space-y-1">
                 <h3 class="text-3xl font-serif text-slate-900">Portfolio <span class="text-sky-600 italic">Library</span></h3>
@@ -30,9 +41,12 @@
 
         <!-- Filter Bar -->
         <div class="flex gap-4 border-b border-slate-100 pb-4 overflow-x-auto scrollbar-hide">
-            <button @click="activeCategory = 'All'; displayLimit = 12" :class="activeCategory === 'All' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" class="text-[10px] font-black uppercase tracking-widest pb-4 -mb-4.5 transition-all outline-none">All Categories</button>
-            <button @click="activeCategory = 'Design'; displayLimit = 12" :class="activeCategory === 'Design' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" class="text-[10px] font-black uppercase tracking-widest pb-4 -mb-4.5 transition-all outline-none">Design</button>
-            <button @click="activeCategory = 'Construction'; displayLimit = 12" :class="activeCategory === 'Construction' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" class="text-[10px] font-black uppercase tracking-widest pb-4 -mb-4.5 transition-all outline-none">Construction</button>
+            <template x-for="cat in ['All', 'Design', 'Construction']">
+                <button @click="activeCategory = cat; displayLimit = 8" 
+                        :class="activeCategory === cat ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
+                        class="text-[10px] font-black uppercase tracking-widest pb-4 -mb-4.5 transition-all outline-none"
+                        x-text="cat === 'All' ? 'All Categories' : cat"></button>
+            </template>
         </div>
 
         <template x-teleport="body">
@@ -70,7 +84,9 @@
                         </button>
                     </div>
                     
-                    <form id="uploadProjectForm" action="{{ route('admin.portfolio.store') }}" method="POST" enctype="multipart/form-data" class="flex-1 overflow-y-auto p-8 lg:p-10 custom-scrollbar" x-data="{ desc: '' }">
+                    <form id="uploadProjectForm" action="{{ route('admin.portfolio.store') }}" method="POST" enctype="multipart/form-data" 
+                          class="flex-1 overflow-y-auto p-8 lg:p-10 custom-scrollbar" 
+                          @submit="isUploading = true">
                         @csrf
                         <div class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -101,43 +117,32 @@
                             <div class="space-y-1.5">
                                 <div class="flex justify-between items-center px-2">
                                     <label class="text-[9px] font-black uppercase text-slate-400">Concept Description (Optional)</label>
-                                    <span class="text-[8px] font-bold" :class="desc.length > 900 ? 'text-red-500' : 'text-slate-400'" x-text="desc.length + ' / 1000'"></span>
                                 </div>
-                                <textarea name="description" x-model="desc" maxlength="1000" rows="3" placeholder="Briefly describe the architectural vision..." class="w-full rounded-2xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs p-4 min-h-[80px] max-h-[160px]"></textarea>
+                                <textarea name="description" placeholder="Briefly describe the architectural vision..." class="w-full rounded-2xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs p-4 min-h-[80px] max-h-[160px]"></textarea>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-2" x-data="{ coverPreview: null }">
+                                <div class="space-y-2">
                                     <label class="text-[9px] font-black uppercase text-sky-600 ml-2">Main Cover</label>
-                                    <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-sky-100 bg-sky-50/30 overflow-hidden transition-all hover:border-sky-300">
-                                        <input type="file" name="cover" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                                               @change="const file = $el.files[0]; if(file) { coverPreview = URL.createObjectURL(file) }">
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none" x-show="!coverPreview">
-                                            <svg class="w-5 h-5 text-sky-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                            <p class="text-[8px] font-black uppercase tracking-widest text-sky-700">Set Cover</p>
-                                        </div>
-                                        <img x-show="coverPreview" :src="coverPreview" class="w-full h-full object-cover">
-                                    </div>
+                                    <input type="file" name="cover" required class="w-full text-[10px]">
                                 </div>
 
                                 <div class="space-y-2">
                                     <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Gallery Bundle</label>
-                                    <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/50 overflow-hidden transition-all hover:border-slate-300">
-                                        <input type="file" name="images[]" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                                               @change="fileCount = $el.files.length">
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
-                                            <svg class="w-5 h-5 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11l-8 8-4-4m0 0l-4 4m4-4l4 4m4-4l4 4"/></svg>
-                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-700" x-text="fileCount > 0 ? fileCount + ' Files' : 'Gallery'"></p>
-                                        </div>
-                                    </div>
+                                    <input type="file" name="images[]" multiple required class="w-full text-[10px]">
                                 </div>
                             </div>
                         </div>
                     </form>
 
                     <div class="p-8 lg:p-10 pt-6 border-t border-slate-50 flex justify-end bg-white">
-                        <button type="submit" form="uploadProjectForm" class="px-10 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl">
-                            Complete Project
+                        <button type="submit" form="uploadProjectForm" 
+                                :disabled="isUploading"
+                                class="px-10 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl flex items-center gap-3">
+                            <span x-text="isUploading ? 'CURATING...' : 'Complete Project'"></span>
+                            <template x-if="isUploading">
+                                <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            </template>
                         </button>
                     </div>
                 </div>
@@ -146,21 +151,19 @@
 
         <!-- Projects Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @foreach($projects as $index => $project)
-                <div class="group bg-white rounded-[2.5rem] p-4 border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1"
-                     x-show="(activeCategory === 'All' || activeCategory === '{{ $project->category }}') && {{ $index }} < displayLimit"
-                     x-transition.scale.95>
+            <template x-for="(project, index) in displayedProjects" :key="project.id">
+                <div class="group bg-white rounded-[2.5rem] p-4 border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
                     
                     <div class="aspect-[16/10] rounded-[1.8rem] overflow-hidden mb-5 relative bg-slate-50">
-                        <img src="{{ asset($project->image_path) }}" 
+                        <img :src="'/' + project.image_path" 
                              loading="lazy"
                              class="object-cover w-full h-full group-hover:scale-105 transition-all duration-700">
                         <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                            <button @click="openBundle({{ $project->toJson() }})" class="w-12 h-12 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-sky-600 hover:text-white transition-all shadow-lg">
+                            <button @click="openBundle(project)" class="w-12 h-12 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-sky-600 hover:text-white transition-all shadow-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg>
                             </button>
 
-                            <form action="{{ route('admin.portfolio.destroy', $project) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this entire project?')">
+                            <form :action="'/admin/portfolio/' + project.id" method="POST" onsubmit="return confirm('Are you sure you want to delete this entire project?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="w-12 h-12 bg-white text-red-600 rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-lg">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -171,13 +174,20 @@
 
                     <div class="px-2 pb-2">
                         <div class="flex items-center justify-between mb-1">
-                            <h4 class="font-serif text-lg text-slate-900 line-clamp-1">{{ $project->title }}</h4>
-                            <span class="text-[10px] font-black text-slate-300">{{ $project->year }}</span>
+                            <h4 class="font-serif text-lg text-slate-900 line-clamp-1" x-text="project.title"></h4>
+                            <span class="text-[10px] font-black text-slate-300" x-text="project.year"></span>
                         </div>
-                        <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest">{{ $project->category }}</p>
+                        <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest" x-text="project.category"></p>
                     </div>
                 </div>
-            @endforeach
+            </template>
+        </div>
+
+        <!-- Load More Admin -->
+        <div class="mt-12 flex justify-center" x-show="displayLimit < filteredProjects.length">
+            <button @click="displayLimit += 8" class="px-10 py-4 bg-white border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-sky-600 shadow-sm">
+                Load More Projects
+            </button>
         </div>
 
         <!-- Load More Admin -->
