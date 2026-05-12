@@ -3,10 +3,13 @@
         activeCategory: "All", 
         showUpload: false,
         bundleModal: false,
+        deleteModal: false,
         displayLimit: 8,
         fileCount: 0,
         isUploading: false,
         selectedProject: { id: null, title: "", category: "", year: "", images: [] },
+        projectToDelete: null,
+        imageToDelete: null,
         allProjects: @json($projects->items()),
 
         get filteredProjects() {
@@ -21,6 +24,18 @@
         openBundle(project) {
             this.selectedProject = project;
             this.bundleModal = true;
+        },
+
+        confirmDelete(project) {
+            this.projectToDelete = project;
+            this.imageToDelete = null;
+            this.deleteModal = true;
+        },
+
+        confirmImageDelete(image) {
+            this.imageToDelete = image;
+            this.projectToDelete = null;
+            this.deleteModal = true;
         }
     }'>
         <div class="flex items-center justify-between">
@@ -54,7 +69,7 @@
                  x-cloak
                  class="fixed inset-0 z-[200] flex items-center justify-center p-6 md:p-12">
                 
-                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-xl transition-opacity duration-500" 
+                <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-500" 
                      @click="showUpload = false"
                      x-show="showUpload"
                      x-transition:enter="ease-out duration-300"
@@ -175,11 +190,11 @@
                         </div>
                     </form>
 
-                    <div class="p-8 lg:p-10 pt-6 border-t border-slate-50 flex justify-end bg-white">
+                    <div class="p-8 lg:p-10 pt-6 border-t border-slate-50 flex justify-center bg-white">
                         <button type="submit" form="uploadProjectForm" 
                                 :disabled="isUploading || fileCount > 10"
-                                class="px-10 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
-                            <span x-text="isUploading ? 'CURATING...' : 'Complete Project'"></span>
+                                class="px-12 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span x-text="isUploading ? 'CURATING...' : 'Create Project'"></span>
                             <template x-if="isUploading">
                                 <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                             </template>
@@ -203,12 +218,9 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg>
                             </button>
 
-                            <form :action="'/admin/portfolio/' + project.id" method="POST" onsubmit="return confirm('Are you sure you want to delete this entire project?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="w-12 h-12 bg-white text-red-600 rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-lg">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                </button>
-                            </form>
+                            <button @click="confirmDelete(project)" class="w-12 h-12 bg-white text-red-600 rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
                         </div>
                     </div>
 
@@ -230,7 +242,7 @@
 
         <template x-teleport="body">
             <div x-show="bundleModal" x-cloak class="fixed inset-0 z-[250] flex items-center justify-center p-6 md:p-12">
-                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-xl transition-opacity duration-500" @click="bundleModal = false"></div>
+                <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-500" @click="bundleModal = false"></div>
                 
                 <div class="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-white/20" @click.stop>
                     
@@ -251,12 +263,9 @@
                                 <div class="group/img relative aspect-square rounded-[2rem] overflow-hidden bg-white border-2 border-white shadow-premium transition-all hover:shadow-2xl">
                                     <img :src="img.path" class="w-full h-full object-cover transition-all duration-700">
                                     <div class="absolute inset-0 bg-red-600/90 opacity-0 group-hover/img:opacity-100 transition-all flex items-center justify-center backdrop-blur-sm">
-                                        <form :action="'/admin/portfolio/image/' + img.id" method="POST">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Permanently remove this architectural perspective?')" class="w-12 h-12 rounded-full bg-white text-red-600 flex items-center justify-center hover:scale-110 transition-transform">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                            </button>
-                                        </form>
+                                        <button @click="confirmImageDelete(img)" class="w-12 h-12 rounded-full bg-white text-red-600 flex items-center justify-center hover:scale-110 transition-transform">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
                                     </div>
                                 </div>
                             </template>
@@ -336,6 +345,44 @@
                                     Cancel
                                 </button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template x-teleport="body">
+            <div x-show="deleteModal" x-cloak class="fixed inset-0 z-[300] flex items-center justify-center p-6">
+                <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-500" @click="deleteModal = false"></div>
+                
+                <div class="relative bg-white w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl p-10 text-center border border-white/20" 
+                     x-show="deleteModal"
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-95 translate-y-8"
+                     x-transition:enter-end="opacity-100 scale-100 translate-y-0">
+                    
+                    <!-- Warning Icon -->
+                    <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-2xl font-serif text-slate-900 mb-3" x-text="imageToDelete ? 'Remove Perspective?' : 'Delete Project?'"></h3>
+                    <p class="text-xs text-slate-400 mb-10 leading-relaxed">
+                        <span x-show="projectToDelete">Are you sure you want to permanently remove <span class="font-bold text-slate-600 italic" x-text="projectToDelete?.title"></span>?</span>
+                        <span x-show="imageToDelete">Permanently remove this architectural perspective from the project bundle?</span>
+                        This action cannot be undone.
+                    </p>
+
+                    <div class="flex gap-3">
+                        <button @click="deleteModal = false" class="flex-1 py-4 bg-slate-50 text-slate-400 rounded-xl font-bold uppercase text-[9px] tracking-widest hover:bg-slate-100 transition-all">
+                            Keep it
+                        </button>
+                        <form :action="projectToDelete ? '/admin/portfolio/' + projectToDelete.id : (imageToDelete ? '/admin/portfolio/image/' + imageToDelete.id : '#')" method="POST" class="flex-1">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="w-full py-4 bg-red-600 text-white rounded-xl font-bold uppercase text-[9px] tracking-[0.2em] shadow-xl hover:bg-red-700 transition-all">
+                                Confirm
+                            </button>
                         </form>
                     </div>
                 </div>
