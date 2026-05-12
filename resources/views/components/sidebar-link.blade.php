@@ -6,7 +6,7 @@ $classes = ($active ?? false)
             : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border-transparent';
 @endphp
 
-<a href="{{ $href }}" {{ $attributes->merge(['class' => 'group flex items-center gap-4 px-4 py-3.5 rounded-2xl border transition-all duration-300 ' . $classes]) }}>
+<a href="{{ $href }}" {{ $attributes->merge(['class' => 'group flex items-center gap-4 px-4 py-3.5 rounded-2xl border ' . $classes]) }}>
     <div class="shrink-0">
         @switch($icon)
             @case('dashboard')
@@ -42,7 +42,7 @@ $classes = ($active ?? false)
                 @break
         @endswitch
     </div>
-    <span x-show="sidebarOpen" x-transition.opacity.duration.300ms class="text-[10px] font-black tracking-widest whitespace-nowrap">
+    <span x-show="sidebarOpen" class="text-[10px] font-black tracking-widest whitespace-nowrap">
         {{ $slot }}
     </span>
 </a>

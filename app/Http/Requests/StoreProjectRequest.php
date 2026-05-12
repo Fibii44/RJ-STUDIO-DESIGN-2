@@ -21,7 +21,7 @@ class StoreProjectRequest extends FormRequest
             'location'    => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'cover'       => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
-            'images'      => 'nullable|array|max:5',
+            'images'      => 'nullable|array|max:10',
             'images.*'    => 'image|mimes:jpeg,png,jpg,webp|max:5120',
         ];
     }

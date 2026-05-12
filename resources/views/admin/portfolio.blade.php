@@ -74,7 +74,7 @@
                      x-transition:leave-end="opacity-0 scale-95 translate-y-8"
                      @click.stop>
                     
-                    <div class="p-8 lg:p-10 pb-6 flex justify-between items-start border-b border-slate-50">
+                    <div class="p-8 lg:p-10 pb-4 flex justify-between items-start border-b border-slate-50">
                         <div class="space-y-1">
                             <h4 class="font-serif text-3xl text-slate-900">Upload <span class="italic text-sky-600">Project</span></h4>
                             <p class="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em]">Curation • Architectural Bundle</p>
@@ -85,17 +85,17 @@
                     </div>
                     
                     <form id="uploadProjectForm" action="{{ route('admin.portfolio.store') }}" method="POST" enctype="multipart/form-data" 
-                          class="flex-1 overflow-y-auto p-8 lg:p-10 custom-scrollbar" 
+                          class="flex-1 overflow-y-auto p-8 lg:p-10 pt-2 custom-scrollbar" 
                           @submit="isUploading = true">
                         @csrf
                         <div class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div class="md:col-span-2 space-y-1.5">
-                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Project Title</label>
+                                    <label class="text-[10px] font-bold text-slate-400 ml-2">Project Title</label>
                                     <input type="text" name="title" required placeholder="Ex: Minimalist Glass Villa" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
                                 </div>
                                 <div class="space-y-1.5">
-                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Category</label>
+                                    <label class="text-[10px] font-bold text-slate-400 ml-2">Category</label>
                                     <select name="category" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4">
                                         <option value="Design">Architectural Design</option>
                                         <option value="Construction">Construction Management</option>
@@ -105,18 +105,18 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div class="md:col-span-2 space-y-1.5">
-                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Location (Optional)</label>
+                                    <label class="text-[10px] font-bold text-slate-400 ml-2">Location (Optional)</label>
                                     <input type="text" name="location" placeholder="Ex: Bukidnon, Philippines" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
                                 </div>
                                 <div class="space-y-1.5">
-                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Release Year</label>
+                                    <label class="text-[10px] font-bold text-slate-400 ml-2">Project Year</label>
                                     <input type="number" name="year" value="{{ date('Y') }}" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
                                 </div>
                             </div>
 
                             <div class="space-y-1.5">
                                 <div class="flex justify-between items-center px-2">
-                                    <label class="text-[9px] font-black uppercase text-slate-400">Concept Description (Optional)</label>
+                                    <label class="text-[10px] font-bold text-slate-400">Concept Description (Optional)</label>
                                 </div>
                                 <textarea name="description" placeholder="Briefly describe the architectural vision..." class="w-full rounded-2xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs p-4 min-h-[80px] max-h-[160px]"></textarea>
                             </div>
@@ -124,7 +124,10 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Main Cover Upload -->
                                 <div class="space-y-2" x-data="{ coverPreview: null }">
-                                    <label class="text-[9px] font-black uppercase text-sky-600 ml-2">Main Cover Perspective</label>
+                                    <div class="flex justify-between items-center px-2">
+                                        <label class="text-[10px] font-bold text-sky-600">Main Cover Perspective</label>
+                                        <span class="text-[10px] font-medium text-sky-500 italic">Max 5MB per image</span>
+                                    </div>
                                     <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-sky-100 bg-sky-50/30 overflow-hidden transition-all hover:border-sky-300 cursor-pointer">
                                         <input type="file" name="cover" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                                                @change="const file = $el.files[0]; if(file) { coverPreview = URL.createObjectURL(file) }">
@@ -138,23 +141,33 @@
                                         
                                         <!-- Overlay on Hover when image exists -->
                                         <div x-show="coverPreview" class="absolute inset-0 bg-sky-600/20 opacity-0 group-hover/upload:opacity-100 transition-opacity flex items-center justify-center">
-                                            <span class="px-3 py-1 bg-white text-sky-600 text-[8px] font-black uppercase rounded-full shadow-sm">Change Image</span>
+                                            <span class="px-3 py-1 bg-white text-sky-600 text-[10px] font-bold rounded-full shadow-sm">Change Image</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Gallery Bundle Upload -->
                                 <div class="space-y-2">
-                                    <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Gallery Bundle (Multiple)</label>
-                                    <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/50 overflow-hidden transition-all hover:border-slate-300 cursor-pointer">
+                                    <div class="flex justify-between items-center px-2">
+                                        <label class="text-[10px] font-bold text-slate-400">Gallery Bundle (Multiple)</label>
+                                        <span class="text-[10px] font-medium transition-colors italic"
+                                              :class="fileCount > 10 ? 'text-red-500' : 'text-sky-500'">
+                                            <span x-text="fileCount > 10 ? 'Limit exceeded: Max 10' : 'Max 5MB per image / 10 images'"></span>
+                                        </span>
+                                    </div>
+                                    <div class="relative group/upload h-28 rounded-2xl border-2 border-dashed overflow-hidden transition-all cursor-pointer"
+                                         :class="fileCount > 10 ? 'border-red-200 bg-red-50/30' : 'border-slate-100 bg-slate-50/50 hover:border-slate-300'">
                                         <input type="file" name="images[]" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                                                @change="fileCount = $el.files.length">
                                         
                                         <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
-                                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center mb-2 group-hover/upload:bg-sky-50 transition-colors">
-                                                <svg class="w-4 h-4 text-slate-400 group-hover/upload:text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                            <div class="w-8 h-8 rounded-full flex items-center justify-center mb-2 transition-colors"
+                                                 :class="fileCount > 10 ? 'bg-red-100' : 'bg-slate-100 group-hover/upload:bg-sky-50'">
+                                                <svg class="w-4 h-4" :class="fileCount > 10 ? 'text-red-500' : 'text-slate-400 group-hover/upload:text-sky-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                             </div>
-                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400 group-hover/upload:text-sky-600" x-text="fileCount > 0 ? fileCount + ' Perspectives Selected' : 'Batch Upload Bundle'"></p>
+                                            <p class="text-[8px] font-black uppercase tracking-widest" 
+                                               :class="fileCount > 10 ? 'text-red-600' : 'text-slate-400 group-hover/upload:text-sky-600'"
+                                               x-text="fileCount > 0 ? (fileCount > 10 ? fileCount + ' Images - Too Many!' : fileCount + ' Perspectives Selected') : 'Batch Upload Bundle'"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -164,8 +177,8 @@
 
                     <div class="p-8 lg:p-10 pt-6 border-t border-slate-50 flex justify-end bg-white">
                         <button type="submit" form="uploadProjectForm" 
-                                :disabled="isUploading"
-                                class="px-10 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl flex items-center gap-3">
+                                :disabled="isUploading || fileCount > 10"
+                                class="px-10 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
                             <span x-text="isUploading ? 'CURATING...' : 'Complete Project'"></span>
                             <template x-if="isUploading">
                                 <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>

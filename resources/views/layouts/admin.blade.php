@@ -13,7 +13,7 @@
             <x-sidebar />
         @endauth
 
-        <div class="flex-1 flex flex-col transition-all duration-500"
+        <div class="flex-1 flex flex-col"
              :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
             
             <header class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-50">
