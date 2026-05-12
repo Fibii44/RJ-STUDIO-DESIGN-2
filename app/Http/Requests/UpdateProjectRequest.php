@@ -18,7 +18,7 @@ class UpdateProjectRequest extends FormRequest
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 5),
             'category' => 'required|in:Design,Construction',
             'location' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1500',
             'new_images.*' => 'nullable|image|max:5120',
         ];
     }

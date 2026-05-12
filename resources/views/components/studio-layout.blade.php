@@ -22,19 +22,17 @@
         @stack('styles')
     </head>
     <body class="antialiased bg-white text-slate-900 font-sans selection:bg-sky-500/30 overflow-x-hidden">
-        <div id="page-loader" class="fixed inset-0 z-[300] bg-white transition-opacity duration-700 pointer-events-none"></div>
-        
         <div x-data="{ sidebarOpen: true }" class="flex min-h-screen">
             @auth
                 <x-sidebar />
             @endauth
 
-            <div class="flex-1 flex flex-col transition-all duration-500"
+            <div class="flex-1 flex flex-col"
                  :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
                 
                 @include('layouts.navigation')
 
-                <div class="page-entry flex-1">
+                <div class="flex-1">
                     {{ $slot }}
                 </div>
 
@@ -46,26 +44,8 @@
 
         <!-- Performance & Interaction Scripts -->
         <script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipfG6STP9qaO3uYpS7oU3wE3uI/Zwc29H5Zz0B9Xb5zUfj3D6Y1f5" crossorigin="anonymous"></script>
-        
-        <script>
-            window.addEventListener('load', () => {
-                const loader = document.getElementById('page-loader');
-                if(loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 700);
-                }
-            });
-        </script>
 
-        <style>
-            .page-entry {
-                animation: pageEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            }
-            @keyframes pageEnter {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-        </style>
+
 
         @stack('scripts')
     </body>

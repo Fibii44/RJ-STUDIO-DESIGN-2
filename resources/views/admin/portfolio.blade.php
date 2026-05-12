@@ -1,11 +1,12 @@
 <x-admin-layout>
-    <div class="space-y-8" x-data='{ 
+    <div class="space-y-8" x-effect="document.body.style.overflow = (showUpload || bundleModal || deleteModal) ? 'hidden' : ''" x-data='{ 
         activeCategory: "All", 
         showUpload: false,
         bundleModal: false,
         deleteModal: false,
         displayLimit: 8,
         fileCount: 0,
+        descriptionText: "",
         isUploading: false,
         selectedProject: { id: null, title: "", category: "", year: "", images: [] },
         projectToDelete: null,
@@ -132,8 +133,15 @@
                             <div class="space-y-1.5">
                                 <div class="flex justify-between items-center px-2">
                                     <label class="text-[10px] font-bold text-slate-400">Concept Description (Optional)</label>
+                                    <span class="text-[10px] font-bold italic transition-colors" 
+                                          :class="(descriptionText.length > 1500) ? 'text-red-500' : 'text-slate-300'">
+                                        <span x-text="descriptionText.length"></span>/1500
+                                    </span>
                                 </div>
-                                <textarea name="description" placeholder="Briefly describe the architectural vision..." class="w-full rounded-2xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs p-4 min-h-[80px] max-h-[160px]"></textarea>
+                                <textarea name="description" 
+                                          x-model="descriptionText"
+                                          placeholder="Briefly describe the architectural vision..." 
+                                          class="w-full rounded-2xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs p-4 min-h-[80px] max-h-[160px]"></textarea>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -226,7 +234,7 @@
 
                     <div class="px-2 pb-2">
                         <div class="flex items-center justify-between mb-1">
-                            <h4 class="font-serif text-lg text-slate-900 line-clamp-1" x-text="project.title"></h4>
+                            <h4 class="font-serif text-lg text-slate-900 line-clamp-1" x-html="project.title"></h4>
                             <span class="text-[10px] font-black text-slate-300" x-text="project.year"></span>
                         </div>
                         <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest" x-text="project.category"></p>
@@ -244,7 +252,8 @@
             <div x-show="bundleModal" x-cloak class="fixed inset-0 z-[250] flex items-center justify-center p-6 md:p-12">
                 <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-500" @click="bundleModal = false"></div>
                 
-                <div class="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-white/20" @click.stop>
+                <form :action="`/admin/portfolio/${selectedProject.id}`" method="POST" enctype="multipart/form-data" class="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-white/20" @click.stop>
+                    @csrf @method('PATCH')
                     
                     <!-- Left: Bundle Preview -->
                     <div class="flex-1 p-8 lg:p-12 overflow-y-auto custom-scrollbar bg-slate-50/30">
@@ -263,19 +272,30 @@
                                 <div class="group/img relative aspect-square rounded-[2rem] overflow-hidden bg-white border-2 border-white shadow-premium transition-all hover:shadow-2xl">
                                     <img :src="img.path" class="w-full h-full object-cover transition-all duration-700">
                                     <div class="absolute inset-0 bg-red-600/90 opacity-0 group-hover/img:opacity-100 transition-all flex items-center justify-center backdrop-blur-sm">
-                                        <button @click="confirmImageDelete(img)" class="w-12 h-12 rounded-full bg-white text-red-600 flex items-center justify-center hover:scale-110 transition-transform">
+                                        <button type="button" @click="confirmImageDelete(img)" class="w-12 h-12 rounded-full bg-white text-red-600 flex items-center justify-center hover:scale-110 transition-transform">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         </button>
                                     </div>
                                 </div>
                             </template>
+
+                            <!-- Add Icon Card -->
+                            <div class="relative group/add aspect-square rounded-[2rem] border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-white hover:border-sky-400 hover:shadow-xl transition-all overflow-hidden">
+                                <input type="file" name="new_images[]" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                       @change="fileCount = $el.files.length">
+                                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                    <div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-sky-600 mb-2 group-hover/add:scale-110 transition-transform">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                                    </div>
+                                    <p class="text-[8px] font-black uppercase text-slate-400 tracking-widest group-hover/add:text-sky-600 transition-colors" x-text="fileCount > 0 ? fileCount + ' Selected' : 'Add Perspective'"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Right: Edit Details -->
                     <div class="w-full lg:w-[450px] flex flex-col bg-white border-l border-slate-100 overflow-hidden">
-                        <form :action="`/admin/portfolio/${selectedProject.id}`" method="POST" enctype="multipart/form-data" class="flex-1 flex flex-col h-full">
-                            @csrf @method('PATCH')
+                        <div class="flex-1 flex flex-col h-full">
                             
                             <!-- Header -->
                             <div class="p-8 lg:p-10 pb-6 flex justify-between items-start border-b border-slate-50/50">
@@ -307,47 +327,36 @@
                                 </div>
 
                                 <div class="space-y-1.5">
-                                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Location</label>
+                                    <label class="text-[10px] font-bold text-slate-400 ml-2">Location</label>
                                     <input type="text" name="location" x-model="selectedProject.location" placeholder="Ex: Bukidnon, Philippines" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4">
                                 </div>
 
                                 <div class="space-y-1.5">
                                     <div class="flex justify-between items-center px-2">
-                                        <label class="text-[9px] font-black uppercase tracking-widest text-slate-400">Description</label>
-                                        <span class="text-[8px] font-bold" :class="(selectedProject.description?.length || 0) > 900 ? 'text-red-500' : 'text-slate-400'" x-text="(selectedProject.description?.length || 0) + ' / 1000'"></span>
+                                        <label class="text-[10px] font-bold text-slate-400">Description</label>
+                                        <span class="text-[10px] font-bold italic transition-colors" 
+                                              :class="((selectedProject.description?.length || 0) > 1500) ? 'text-red-500' : 'text-slate-300'">
+                                            <span x-text="selectedProject.description?.length || 0"></span>/1500
+                                        </span>
                                     </div>
-                                    <textarea name="description" x-model="selectedProject.description" maxlength="1000" rows="3" placeholder="Briefly describe the architectural concept..." class="w-full rounded-2xl border-slate-100 bg-slate-50 text-xs p-4 focus:ring-4 focus:ring-sky-500/10 transition-all min-h-[80px] max-h-[160px]"></textarea>
+                                    <textarea name="description" x-model="selectedProject.description" rows="3" placeholder="Briefly describe the architectural concept..." class="w-full rounded-2xl border-slate-100 bg-slate-50 text-xs p-4 focus:ring-4 focus:ring-sky-500/10 transition-all min-h-[80px] max-h-[160px]"></textarea>
                                 </div>
 
-                                <!-- Add More Perspectives Section -->
-                                <div class="pt-6 border-t border-slate-50 space-y-4">
-                                    <div class="flex items-center justify-between ml-2">
-                                        <h4 class="text-[9px] font-black uppercase text-sky-600 tracking-widest">Add New Perspectives</h4>
-                                        <span class="text-[8px] text-slate-400 uppercase font-black" x-text="fileCount > 0 ? fileCount + ' New Selected' : ''"></span>
-                                    </div>
-                                    <div class="relative group/add h-24 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-all">
-                                        <input type="file" name="new_images[]" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                               @change="fileCount = $el.files.length">
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                            <svg class="w-5 h-5 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                            <p class="text-[8px] font-black uppercase text-slate-500 tracking-widest">Select Files</p>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
 
                             <!-- Footer (Sticky/Fixed at bottom of modal) -->
-                            <div class="p-8 lg:p-10 border-t border-slate-50 bg-white space-y-3">
-                                <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-xl font-bold uppercase text-[9px] tracking-[0.2em] shadow-xl hover:bg-sky-600 transition-all">
-                                    Save All Changes
-                                </button>
-                                <button type="button" @click="bundleModal = false" class="w-full py-3 bg-slate-50 text-slate-400 rounded-xl font-bold uppercase text-[9px] tracking-widest hover:bg-slate-100 transition-all">
+                            <div class="p-8 lg:p-10 border-t border-slate-50 bg-white flex gap-3">
+                                <button type="button" @click="bundleModal = false" class="flex-1 py-4 bg-slate-50 text-slate-400 rounded-xl font-bold uppercase text-[9px] tracking-widest hover:bg-slate-100 transition-all">
                                     Cancel
                                 </button>
+                                <button type="submit" class="flex-[2] py-4 bg-slate-900 text-white rounded-xl font-bold uppercase text-[9px] tracking-[0.2em] shadow-xl hover:bg-sky-600 transition-all">
+                                    Save All Changes
+                                </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </template>
         <template x-teleport="body">
@@ -369,7 +378,7 @@
 
                     <h3 class="text-2xl font-serif text-slate-900 mb-3" x-text="imageToDelete ? 'Remove Perspective?' : 'Delete Project?'"></h3>
                     <p class="text-xs text-slate-400 mb-10 leading-relaxed">
-                        <span x-show="projectToDelete">Are you sure you want to permanently remove <span class="font-bold text-slate-600 italic" x-text="projectToDelete?.title"></span>?</span>
+                        <span x-show="projectToDelete">Are you sure you want to permanently remove <span class="font-bold text-slate-600 italic" x-html="projectToDelete?.title"></span>?</span>
                         <span x-show="imageToDelete">Permanently remove this architectural perspective from the project bundle?</span>
                         This action cannot be undone.
                     </p>

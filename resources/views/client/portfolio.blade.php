@@ -33,17 +33,17 @@
             <div class="flex gap-10 border-b border-slate-100 mb-12 pb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
                 <button @click="activeCategory = 'All'" 
                         :class="activeCategory === 'All' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                        class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 transition-all outline-none">
+                        class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 outline-none">
                     All Projects
                 </button>
                 <button @click="activeCategory = 'Design'" 
                         :class="activeCategory === 'Design' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                        class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 transition-all outline-none">
+                        class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 outline-none">
                     Architectural Design
                 </button>
                 <button @click="activeCategory = 'Construction'" 
                         :class="activeCategory === 'Construction' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                        class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 transition-all outline-none">
+                        class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 outline-none">
                     Construction
                 </button>
             </div>

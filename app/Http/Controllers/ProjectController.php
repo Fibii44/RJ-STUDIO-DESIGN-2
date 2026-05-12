@@ -53,13 +53,13 @@ class ProjectController extends Controller
 
     public function index()
     {
-        $projects = Project::with('images')->latest()->get();
+        $projects = Project::with('images')->orderBy('year', 'desc')->orderBy('created_at', 'desc')->get();
         return view('portfolio.index', compact('projects'));
     }
 
     public function portalIndex()
     {
-        $projects = Project::with('images')->latest()->get();
+        $projects = Project::with('images')->orderBy('year', 'desc')->orderBy('created_at', 'desc')->get();
         return view('client.portfolio', compact('projects'));
     }
 
@@ -72,7 +72,7 @@ class ProjectController extends Controller
     public function adminIndex()
     {
         // Use pagination to keep browser memory light and prevent "Aw Snap" crashes
-        $projects = Project::with('images')->latest()->paginate(12); 
+        $projects = Project::with('images')->orderBy('year', 'desc')->orderBy('created_at', 'desc')->paginate(12); 
         return view('admin.portfolio', compact('projects'));
     }
 

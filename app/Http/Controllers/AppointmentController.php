@@ -20,7 +20,7 @@ class AppointmentController extends Controller
         $formattedDate = Carbon::parse($request->appointment_date)->format('Y-m-d H:i:s');
 
         // The $request->validated() data now includes your new UI fields
-        Appointment::create([
+        $appointment = Appointment::create([
             'user_id'          => Auth::id(),
             'first_name'       => $request->first_name,
             'last_name'        => $request->last_name,
@@ -32,6 +32,14 @@ class AppointmentController extends Controller
             'message'          => $request->message,
             'status'           => 'pending',
         ]);
+
+        // Send Email Notification to Admin
+        try {
+            $adminEmail = env('ADMIN_NOTIFICATION_EMAIL', config('mail.from.address'));
+            \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\NewAppointmentNotification($appointment));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Mail failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('client.appointments')->with('success', 'Your project brief has been received! I will review the details and contact you shortly.');
     }
@@ -57,7 +65,14 @@ class AppointmentController extends Controller
 
         $appointment->update(['status' => 'confirmed']);
 
-        return redirect()->back()->with('success', 'The consultation has been confirmed.');
+        // Send Confirmation Email to Client
+        try {
+            \Illuminate\Support\Facades\Mail::to($appointment->email)->send(new \App\Mail\AppointmentConfirmedNotification($appointment));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Client Confirmation Mail failed: ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'The consultation has been confirmed and the client has been notified.');
     }
 
     public function index()

@@ -64,7 +64,7 @@
                 @endif
             @endauth
 
-            <div class="flex-1 flex flex-col transition-all duration-500"
+            <div class="flex-1 flex flex-col"
                  :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
                 @include('layouts.navigation')
 
