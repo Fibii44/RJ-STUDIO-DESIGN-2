@@ -12,8 +12,8 @@ Route::get('/', function () {
 Route::view('/about-studio', 'about-studio')->name('about-studio');
 Route::view('/services', 'services')->name('services');
 
-// Change Route::view to Route::get
 Route::get('/portfolio', [ProjectController::class, 'index'])->name('portfolio');
+Route::get('/portfolio/{project}', [ProjectController::class, 'show'])->name('projects.show');
 
 
 //Client Route

@@ -9,7 +9,7 @@
 
             <div class="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-12 items-center relative z-10">
                 <div class="space-y-8">
-                    <h1 class="text-5xl lg:text-8xl font-serif tracking-tight leading-[1.1] text-slate-900">
+                    <h1 class="text-4xl lg:text-7xl font-serif tracking-tight leading-[1.1] text-slate-900">
                         Built for <br><span class="text-sky-600 italic">Perspective.</span>
                     </h1>
                     <p class="text-xl text-slate-500 max-w-lg leading-relaxed font-medium">

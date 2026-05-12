@@ -1,5 +1,6 @@
 <!-- Project Modal Component -->
-<div x-show="modalOpen" x-cloak 
+<template x-teleport="body">
+    <div x-show="modalOpen" x-cloak 
      @keydown.window.escape="modalOpen = false"
      class="fixed inset-0 z-[200] flex items-center justify-center p-0 md:p-12"
      x-transition:enter="transition ease-out duration-500"
@@ -82,4 +83,4 @@
             </div>
         </div>
     </div>
-</div>
+</template>

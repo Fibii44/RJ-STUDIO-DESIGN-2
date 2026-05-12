@@ -2,10 +2,12 @@
     <main class="pt-40 pb-32 sky-mesh min-h-screen overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-24">
             <div class="space-y-6">
-                <h1 class="font-serif text-5xl lg:text-8xl text-slate-900 leading-tight">
+                <h1 class="font-serif text-4xl lg:text-7xl text-slate-900 leading-tight">
                     About <span class="text-sky-600 italic">the Studio</span>
                 </h1>
+                @guest
                 <p class="text-xl text-slate-500 max-w-2xl leading-relaxed">Defining the intersection of structural integrity and digital innovation.</p>
+                @endguest
             </div>
         </div>
 

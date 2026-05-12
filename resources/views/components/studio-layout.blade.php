@@ -16,6 +16,7 @@
 
         <!-- Scripts & Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         @stack('styles')
@@ -23,13 +24,25 @@
     <body class="antialiased bg-white text-slate-900 font-sans selection:bg-sky-500/30 overflow-x-hidden">
         <div id="page-loader" class="fixed inset-0 z-[300] bg-white transition-opacity duration-700 pointer-events-none"></div>
         
-        @include('layouts.navigation')
+        <div x-data="{ sidebarOpen: true }" class="flex min-h-screen">
+            @auth
+                <x-sidebar />
+            @endauth
 
-        <div class="page-entry">
-            {{ $slot }}
+            <div class="flex-1 flex flex-col transition-all duration-500"
+                 :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
+                
+                @include('layouts.navigation')
+
+                <div class="page-entry flex-1">
+                    {{ $slot }}
+                </div>
+
+                @guest
+                    <x-studio-footer />
+                @endguest
+            </div>
         </div>
-
-        <x-studio-footer />
 
         <!-- Performance & Interaction Scripts -->
         <script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipfG6STP9qaO3uYpS7oU3wE3uI/Zwc29H5Zz0B9Xb5zUfj3D6Y1f5" crossorigin="anonymous"></script>

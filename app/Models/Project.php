@@ -19,6 +19,8 @@ class Project extends Model
         'title',
         'category',
         'year',
+        'location',
+        'description',
         'image_path',
     ];
 

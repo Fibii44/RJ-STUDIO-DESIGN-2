@@ -15,12 +15,14 @@ class StoreProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'    => 'required|string|max:255',
-            'category' => 'required|string', // Residential, Commercial, etc.
-            'year'     => 'required|digits:4', // Ensures a valid year like 2025
-            'image'    => 'required_without:images|nullable|image|mimes:jpeg,png,jpg|max:5120',
-            'images'   => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240',
+            'title'       => 'required|string|max:255',
+            'category'    => 'required|string', 
+            'year'        => 'required|digits:4', 
+            'location'    => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'cover'       => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
+            'images'      => 'nullable|array',
+            'images.*'    => 'image|mimes:jpeg,png,jpg,webp|max:10240',
         ];
     }
 

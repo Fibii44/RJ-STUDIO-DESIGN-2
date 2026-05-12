@@ -4,15 +4,17 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-24 pt-10 text-center relative">
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl -z-10"></div>
             
-            <h1 class="font-serif text-6xl lg:text-9xl text-slate-900 leading-tight"
+            <h1 class="font-serif text-5xl lg:text-7xl text-slate-900 leading-tight"
                 x-show="loaded" x-transition:enter="transition ease-out duration-1000" x-transition:enter-start="opacity-0 translate-y-8">
                 Tailored <span class="text-sky-600 italic">Execution.</span>
             </h1>
             
+            @guest
             <p class="mt-10 text-slate-500 max-w-2xl mx-auto text-xl leading-relaxed"
                x-show="loaded" x-transition:enter="transition ease-out duration-1000 delay-200" x-transition:enter-start="opacity-0 translate-y-4">
                 Elevating architectural standards through precision design, management, and innovative construction solutions.
             </p>
+            @endguest
         </div>
 
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
@@ -57,7 +59,7 @@
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
 
-                        <h3 class="text-5xl font-serif mb-8 text-white leading-tight">Design & <span class="text-sky-400 italic">Build</span></h3>
+                        <h3 class="text-4xl font-serif mb-8 text-white leading-tight">Design & <span class="text-sky-400 italic">Build</span></h3>
                         <p class="text-sky-100/70 leading-relaxed mb-12 text-lg">The complete architectural experience. We manage everything from the first sketch to the final brick, including IoT integration.</p>
                         
                         <ul class="space-y-8 mb-16">

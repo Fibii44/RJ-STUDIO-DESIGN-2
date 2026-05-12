@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-10 text-center">
        
-        <h2 class="mt-8 text-2xl font-serif font-bold text-slate-900 dark:text-white leading-tight">
+        <h2 class="mt-8 text-2xl font-serif font-bold text-slate-900 leading-tight">
             Client Registration
         </h2>
         <p class="text-sm text-slate-500 mt-2">Join RJ Design Studio to manage your architectural projects.</p>

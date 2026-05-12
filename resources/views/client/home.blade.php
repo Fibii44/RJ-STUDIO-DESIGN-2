@@ -31,7 +31,7 @@
         <div class="pt-24 pb-8">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div class="space-y-4">
-                    <h2 class="font-serif text-5xl lg:text-7xl text-slate-900 leading-tight">
+                    <h2 class="font-serif text-4xl text-slate-900 leading-tight">
                         Welcome, <span class="text-sky-600 italic">{{ Auth::user()->name }}</span>
                     </h2>
                     <p class="text-slate-500 font-medium tracking-tight text-lg">

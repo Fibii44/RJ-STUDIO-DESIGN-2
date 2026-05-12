@@ -36,20 +36,27 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased text-slate-900 bg-slate-50 selection:bg-sky-500/30">
-        <div class="min-h-screen">
-            @include('layouts.navigation')
+        <div x-data="{ sidebarOpen: true }" class="flex min-h-screen">
+            @auth
+                <x-sidebar />
+            @endauth
 
-            <!-- Page Heading -->
-            @isset($header)
-                <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            @endisset
+            <div class="flex-1 flex flex-col transition-all duration-500"
+                 :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
+                @include('layouts.navigation')
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+                <!-- Page Heading -->
+                @isset($header)
+                    <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+                        {{ $header }}
+                    </div>
+                @endisset
+
+                <!-- Page Content -->
+                <main class="flex-1">
+                    {{ $slot }}
+                </main>
+            </div>
         </div>
     </body>
 </html>

@@ -5,7 +5,7 @@
     </style>
     @endpush
 
-    <main class="pt-40 pb-32" 
+    <main class="pt-12 {{ Auth::check() ? 'lg:pt-16' : 'lg:pt-32' }} pb-32" 
         x-data='{ 
             activeCategory: "All",
             modalOpen: false,
@@ -23,16 +23,18 @@
         }'
         x-effect="document.body.classList.toggle('overflow-hidden', modalOpen)">
         
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-16 pt-10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-16">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div class="space-y-4">
-                    <h1 class="font-serif text-5xl lg:text-8xl text-slate-900 leading-tight">
+                    <h1 class="font-serif {{ Auth::check() ? 'text-4xl' : 'text-4xl lg:text-7xl' }} text-slate-900 leading-tight">
                         Selected <span class="text-sky-600 italic">Works</span>
                     </h1>
                 </div>
+                @guest
                 <p class="text-slate-500 max-w-sm text-lg leading-relaxed border-l-2 border-sky-600 pl-8">
                     A curation of professional projects developed by Randolf and the RJ Studio team.
                 </p>
+                @endguest
             </div>
             
             <div class="flex gap-10 border-b border-slate-100 mt-20 pb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
@@ -56,37 +58,33 @@
 
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <!-- Projects Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($projects as $project)
-                    <div class="group cursor-pointer" 
+                    <a href="{{ route('projects.show', $project) }}" class="group" 
                          x-show="activeCategory === 'All' || activeCategory.toLowerCase() === '{{ strtolower($project->category) }}'"
                          x-transition:enter="transition ease-out duration-500"
                          x-transition:enter-start="opacity-0 translate-y-8"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         @click="openModal({{ $project->toJson() }}, 0)">
+                         x-transition:enter-end="opacity-100 translate-y-0">
                         
-                        <div class="aspect-[16/10] rounded-[3.5rem] overflow-hidden bg-slate-50 relative shadow-sm group-hover:shadow-premium transition-all duration-700 border border-slate-100">
+                        <div class="aspect-[16/10] rounded-[2.5rem] overflow-hidden bg-slate-50 relative shadow-sm group-hover:shadow-premium transition-all duration-700 border border-slate-100">
                             <img src="{{ asset($project->image_path) }}" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105">
                             
+                            <!-- Floating Info Badge (App-style) -->
+                            <div class="absolute top-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0 z-20">
+                                <div class="px-6 py-3 bg-slate-900 text-white rounded-2xl shadow-2xl flex flex-col gap-0.5 border border-white/10">
+                                    <h3 class="text-xs font-black uppercase tracking-[0.2em]">{{ $project->title }}</h3>
+                                    <p class="text-[8px] text-sky-400 font-bold uppercase tracking-[0.15em]">{{ $project->category }} • {{ $project->year }}</p>
+                                </div>
+                            </div>
+
                             @if($project->images->count() > 1)
                                 <div class="absolute bottom-8 right-8 px-5 py-2.5 bg-white/40 backdrop-blur-md rounded-full text-[9px] font-black text-slate-900 uppercase tracking-widest border border-white/20 z-10 shadow-xl">
                                     {{ $project->images->count() }} Perspectives
                                 </div>
                             @endif
 
-                            <div class="absolute inset-0 bg-slate-900/5 group-hover:bg-transparent transition-colors"></div>
                         </div>
-
-                        <div class="mt-10 flex justify-between items-start px-4">
-                            <div class="space-y-3">
-                                <h3 class="text-4xl font-serif text-slate-900 leading-tight group-hover:text-sky-600 transition-colors">{{ $project->title }}</h3>
-                                <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">{{ $project->category }} <span class="mx-2 text-slate-200">|</span> {{ $project->year }}</p>
-                            </div>
-                            <span class="w-16 h-16 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white transition-all duration-500 shadow-sm">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                            </span>
-                        </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
 

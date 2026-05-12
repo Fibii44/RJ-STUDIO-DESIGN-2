@@ -17,6 +17,12 @@ class ProjectController extends Controller
         return view('portfolio', compact('projects'));
     }
 
+    public function show(Project $project)
+    {
+        $project->load('images');
+        return view('projects.show', compact('project'));
+    }
+
     public function adminIndex()
     {
         $projects = Project::with('images')->latest()->get(); 
@@ -25,41 +31,50 @@ class ProjectController extends Controller
 
     public function store(StoreProjectRequest $request)
     {
+        // 1. Handle the Main Cover Image
+        $coverPath = '';
+        if ($request->hasFile('cover')) {
+            $path = $request->file('cover')->store('', 'supabase');
+            $coverPath = Storage::disk('supabase')->url($path);
+        }
+
+        // 2. Create the Project
         $project = Project::create([
             'title' => $request->title,
             'category' => $request->category,
             'year' => $request->year,
-            'image_path' => '', 
+            'location' => $request->location,
+            'description' => $request->description,
+            'image_path' => $coverPath, 
         ]);
 
+        // 3. Handle the Perspective Gallery
         if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $index => $image) {
+            foreach ($request->file('images') as $image) {
                 $path = $image->store('', 'supabase');
                 $storedPath = Storage::disk('supabase')->url($path);
-                
                 $project->images()->create(['path' => $storedPath]);
-                if ($index === 0) {
-                    $project->update(['image_path' => $storedPath]);
-                }
             }
         }
 
-        return back()->with('success', "Project bundle created successfully!");
+        return back()->with('success', "Architectural project fully curated and uploaded!");
     }
 
     /**
      * Update metadata (Title/Year/Category)
      */
     public function update(UpdateProjectRequest $request, Project $project)
-        {
-            $project->update([
-                'title' => $request->title,
-                'year' => $request->year,
-                'category' => $request->category,
-            ]);
+    {
+        $project->update([
+            'title' => $request->title,
+            'year' => $request->year,
+            'category' => $request->category,
+            'location' => $request->location,
+            'description' => $request->description,
+        ]);
 
-            return redirect()->route('admin.portfolio.index')->with('success', 'Project details updated!');
-        }
+        return redirect()->route('admin.portfolio.index')->with('success', 'Project details updated!');
+    }
     /**
      * Add more images to an existing bundle
      */
