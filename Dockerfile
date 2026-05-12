@@ -24,6 +24,13 @@ RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Configure PHP for large architectural file uploads and memory limits
+RUN echo "upload_max_filesize = 50M\n" \
+         "post_max_size = 50M\n" \
+         "memory_limit = 256M\n" \
+         "max_execution_time = 120\n" \
+         > /usr/local/etc/php/conf.d/uploads.ini
+
 # Set working directory
 WORKDIR /var/www
 
