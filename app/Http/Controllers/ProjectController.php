@@ -14,13 +14,19 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::with('images')->latest()->get();
-        return view('portfolio', compact('projects'));
+        return view('portfolio.index', compact('projects'));
+    }
+
+    public function portalIndex()
+    {
+        $projects = Project::with('images')->latest()->get();
+        return view('client.portfolio', compact('projects'));
     }
 
     public function show(Project $project)
     {
         $project->load('images');
-        return view('projects.show', compact('project'));
+        return view('portfolio.show', compact('project'));
     }
 
     public function adminIndex()

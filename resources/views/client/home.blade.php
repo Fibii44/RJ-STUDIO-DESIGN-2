@@ -28,21 +28,21 @@
 @endif
 
     <x-slot name="header">
-        <div class="pt-24 pb-8">
+        <div class="pt-10 pb-8">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div class="space-y-4">
                     <h2 class="font-serif text-4xl text-slate-900 leading-tight">
                         Welcome, <span class="text-sky-600 italic">{{ Auth::user()->name }}</span>
                     </h2>
                     <p class="text-slate-500 font-medium tracking-tight text-lg">
-                        Villa Modern Residence <span class="text-slate-300 mx-2">|</span> Phase 03: Schematic Design
+                        {{ $recentProjects->first() ? $recentProjects->first()->title : 'Studio Project Hub' }} <span class="text-slate-300 mx-2">|</span> Latest Updates
                     </p>
                 </div>
                 
                 <div class="flex items-center gap-4">
-                    <a href="{{ route('services') }}" class="inline-flex items-center px-10 py-5 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-sky-600 hover:translate-y-[-4px] transition-all duration-300 shadow-2xl shadow-slate-900/20">
+                    <button @click.prevent="$dispatch('open-modal', 'appointment-modal')" class="inline-flex items-center px-10 py-5 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-sky-600 hover:translate-y-[-4px] transition-all duration-300 shadow-2xl shadow-slate-900/20">
                         New Consultation
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -53,57 +53,85 @@
             
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <div class="lg:col-span-3 relative h-[550px] rounded-[3.5rem] overflow-hidden shadow-premium group">
-                    <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&q=80&w=1200" alt="Latest Rendering" class="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent flex flex-col justify-end p-12">
-                        <span class="text-sky-400 font-black uppercase tracking-widest text-[10px] mb-3">Latest 3D Rendering</span>
-                        <h3 class="text-white text-4xl font-serif">Exterior View - South Wing Elevation</h3>
-                    </div>
+                    @if($recentProjects->count() > 0)
+                        <img src="{{ asset($recentProjects[0]->image_path) }}" alt="{{ $recentProjects[0]->title }}" class="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/10 to-transparent flex flex-col justify-end p-12">
+                            <span class="text-sky-400 font-black uppercase tracking-widest text-[10px] mb-3">{{ $recentProjects[0]->category }}</span>
+                            <h3 class="text-white text-4xl font-serif">{{ $recentProjects[0]->title }}</h3>
+                        </div>
+                    @else
+                        <div class="w-full h-full bg-slate-200 flex flex-col items-center justify-center text-slate-400">
+                            <svg class="w-12 h-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <p class="font-serif">No projects uploaded yet</p>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="bg-white rounded-[3.5rem] p-10 border border-slate-100 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h4 class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-10">Design Milestones</h4>
-                        <div class="space-y-12 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-px before:bg-slate-100">
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center border-4 border-white">
-                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
-                                </div>
-                                <p class="text-[11px] font-black uppercase tracking-widest text-slate-900">Site Survey</p>
-                                <p class="text-[10px] text-slate-400 mt-1">Completed</p>
+                        <h4 class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-8">Upcoming Appointments</h4>
+                        
+                        @if($appointments->count() > 0)
+                            <div class="space-y-6">
+                                @foreach($appointments->take(3) as $appointment)
+                                    <div class="p-5 rounded-3xl border {{ $appointment->status === 'confirmed' ? 'border-green-100 bg-green-50/30' : 'border-slate-100 bg-slate-50/50' }} transition-all hover:shadow-md">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <p class="text-xs font-black uppercase tracking-widest text-slate-900 leading-tight">{{ $appointment->service_type }}</p>
+                                            <span class="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $appointment->status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">
+                                                {{ $appointment->status }}
+                                            </span>
+                                        </div>
+                                        <div class="space-y-1.5">
+                                            <div class="flex items-center gap-2 text-slate-500 text-sm">
+                                                <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                <span class="font-medium">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('M d, Y') }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-slate-500 text-sm">
+                                                <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                <span class="font-medium">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-sky-500 flex items-center justify-center border-4 border-white animate-pulse"></div>
-                                <p class="text-[11px] font-black uppercase tracking-widest text-slate-900">Schematic Design</p>
-                                <p class="text-[10px] text-sky-600 font-bold mt-1">In Progress</p>
+                        @else
+                            <div class="text-center py-12 bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
+                                <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">No scheduled appointments</p>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     
-                    <div class="pt-8 border-t border-slate-50">
-                        <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Target Handover</p>
-                        <p class="font-serif text-2xl text-slate-900">Oct 2026</p>
+                    <div class="pt-8 border-t border-slate-50 mt-8">
+                        <a href="{{ route('client.appointments') }}" class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 hover:text-sky-600 transition-colors flex items-center justify-between group">
+                            View Full Schedule 
+                            <span class="text-sky-600 group-hover:translate-x-2 transition-transform text-xl leading-none">&rarr;</span>
+                        </a>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div class="lg:col-span-2 space-y-10">
-                    <h3 class="font-serif text-3xl">Project Documentation</h3>
+                    <h3 class="font-serif text-3xl">Studio Showcase</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        @if($recentProjects->count() > 1)
                         <div class="group cursor-pointer">
                             <div class="aspect-video rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
-                                <img src="https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover transition-all duration-700">
+                                <img src="{{ asset($recentProjects[1]->image_path) }}" class="w-full h-full object-cover transition-all duration-700">
                             </div>
-                            <h4 class="font-serif text-xl text-slate-900">Floor Plan - L01</h4>
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">Blueprint &bull; PDF</p>
+                            <h4 class="font-serif text-xl text-slate-900">{{ $recentProjects[1]->title }}</h4>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">{{ $recentProjects[1]->category }}</p>
                         </div>
+                        @endif
+                        @if($recentProjects->count() > 2)
                         <div class="group cursor-pointer">
                             <div class="aspect-video rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
-                                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover transition-all duration-700">
+                                <img src="{{ asset($recentProjects[2]->image_path) }}" class="w-full h-full object-cover transition-all duration-700">
                             </div>
-                            <h4 class="font-serif text-xl text-slate-900">Landscape Plan</h4>
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">Blueprint &bull; PDF</p>
+                            <h4 class="font-serif text-xl text-slate-900">{{ $recentProjects[2]->title }}</h4>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">{{ $recentProjects[2]->category }}</p>
                         </div>
+                        @endif
                     </div>
                 </div>
 
@@ -114,30 +142,7 @@
                          <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
                     </div>
 
-                    <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm">
-                        <h4 class="font-serif text-2xl mb-8">Next Meeting</h4>
-                        
-                        @php $latest = $appointments->where('status', 'confirmed')->first() ?? $appointments->first(); @endphp
-
-                        @if($latest)
-                        <div class="flex items-center gap-6">
-                            <div class="w-16 h-20 bg-sky-50 flex flex-col items-center justify-center rounded-2xl border border-sky-100">
-                                <span class="text-[10px] font-black text-sky-600 uppercase tracking-widest">{{ \Carbon\Carbon::parse($latest->appointment_date)->format('M') }}</span>
-                                <span class="text-3xl font-serif text-sky-900 leading-none mt-1">{{ \Carbon\Carbon::parse($latest->appointment_date)->format('d') }}</span>
-                            </div>
-                            <div>
-                                <p class="font-serif text-xl text-slate-900 leading-tight">{{ $latest->service_type }}</p>
-                                <p class="text-[10px] font-black uppercase tracking-widest mt-2 {{ $latest->status === 'confirmed' ? 'text-green-500' : 'text-amber-500' }}">
-                                    {{ ucfirst($latest->status) }}
-                                </p>
-                            </div>
-                        </div>
-                        @else
-                        <div class="text-center py-4 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">No upcoming meetings</p>
-                        </div>
-                        @endif
-                    </div>
+                    <!-- Removed redundant Next Meeting block -->
                 </div>
             </div>
 

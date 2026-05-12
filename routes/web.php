@@ -17,16 +17,17 @@ Route::view('/about-studio', 'about-studio')->name('about-studio');
 Route::view('/services', 'services')->name('services');
 
 Route::get('/portfolio', [ProjectController::class, 'index'])->name('portfolio');
-Route::get('/portfolio/{project}', [ProjectController::class, 'show'])->name('projects.show');
+Route::get('/portfolio/{project}', [ProjectController::class, 'show'])->name('portfolio.show');
 
 
 //Client Route
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/client/home', function () {
+    Route::get('/client/dashboard', function () {
         // Get the logged-in user's appointments
         $appointments = Auth::user()->appointments()->orderBy('appointment_date', 'asc')->get();
+        $recentProjects = \App\Models\Project::latest()->take(3)->get();
         
-        return view('client.home', compact('appointments'));
+        return view('client.home', compact('appointments', 'recentProjects'));
     })->middleware(['auth', 'verified'])->name('home');
 
     Route::get('/my-appointments', function () {
@@ -36,11 +37,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('client.appointments', compact('appointments'));
     })->middleware(['auth', 'verified'])->name('client.appointments');
 
+    Route::get('/client/portfolio', [ProjectController::class, 'portalIndex'])->name('client.portfolio');
+
     // Appointment Booking Routes
     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
     Route::delete('/admin/portfolio/image/{image}', [ProjectController::class, 'destroyImage'])->name('admin.portfolio.image.destroy');
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
     
+    Route::get('/support', function() {
+        return view('support.index');
+    })->name('support');
 });
 
 
@@ -62,6 +69,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // --- Appointment Management Routes ---
     Route::get('/admin/appointments', [AppointmentController::class, 'index'])->name('admin.appointments.index');
+    Route::patch('/admin/appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])->name('admin.appointments.confirm');
+    Route::get('/admin/schedule', [\App\Http\Controllers\Admin\ScheduleController::class, 'index'])->name('admin.schedule.index');
+    Route::post('/admin/schedule', [\App\Http\Controllers\Admin\ScheduleController::class, 'update'])->name('admin.schedule.update');
+
+    // --- Client Management Routes ---
+    Route::get('/admin/clients', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.clients.index');
 
     // --- Portfolio Management Routes ---
     Route::get('/admin/portfolio', [ProjectController::class, 'adminIndex'])->name('admin.portfolio.index');

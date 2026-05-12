@@ -33,7 +33,31 @@ class AppointmentController extends Controller
             'status'           => 'pending',
         ]);
 
-        return redirect()->route('home')->with('success', 'Your project brief has been received! I will review the details and contact you shortly.');
+        return redirect()->route('client.appointments')->with('success', 'Your project brief has been received! I will review the details and contact you shortly.');
+    }
+
+    public function cancel(Appointment $appointment)
+    {
+        // Ensure the user owns this appointment
+        if ($appointment->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+            abort(403);
+        }
+
+        $appointment->update(['status' => 'cancelled']);
+
+        return redirect()->back()->with('success', 'The consultation has been cancelled.');
+    }
+
+    public function confirm(Appointment $appointment)
+    {
+        // Only admin can confirm
+        if (Auth::user()->role !== 'admin') {
+            abort(403);
+        }
+
+        $appointment->update(['status' => 'confirmed']);
+
+        return redirect()->back()->with('success', 'The consultation has been confirmed.');
     }
 
     public function index()

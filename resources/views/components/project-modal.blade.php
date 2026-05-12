@@ -19,7 +19,7 @@
         <!-- Top Overlay: Title & Close -->
         <div class="absolute top-0 left-0 right-0 z-[220] p-8 flex items-center justify-between pointer-events-none">
             <div class="px-8 py-4 bg-black/40 backdrop-blur-xl rounded-full border border-white/10 pointer-events-auto shadow-2xl">
-                <h2 class="text-xs font-black uppercase tracking-[0.4em] text-white" x-text="currentProject.title"></h2>
+                <h2 class="text-xs font-black tracking-[0.4em] text-white" x-text="currentProject.title"></h2>
             </div>
             <button @click="modalOpen = false" class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-red-500 hover:rotate-90 transition-all duration-700 shadow-2xl pointer-events-auto group">
                 <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>

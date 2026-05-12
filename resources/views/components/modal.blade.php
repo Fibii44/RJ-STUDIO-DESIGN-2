@@ -11,6 +11,9 @@ $maxWidth = [
     'lg' => 'sm:max-w-lg',
     'xl' => 'sm:max-w-xl',
     '2xl' => 'sm:max-w-2xl',
+    '4xl' => 'sm:max-w-4xl',
+    '5xl' => 'sm:max-w-5xl',
+    '6xl' => 'sm:max-w-6xl',
     '7xl' => 'sm:max-w-7xl',
     'full' => 'sm:max-w-full',
 ][$maxWidth];
@@ -48,7 +51,7 @@ $maxWidth = [
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
     x-show="show"
-    class="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden px-4 py-6 sm:px-0"
+    class="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden px-4 py-6 sm:px-0"
     style="display: {{ $show ? 'block' : 'none' }};"
 >
     <div
@@ -62,12 +65,12 @@ $maxWidth = [
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
     >
-        <div class="absolute inset-0 bg-slate-950/98 backdrop-blur-sm"></div>
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
     </div>
 
     <div
         x-show="show"
-        class="relative w-full {{ $maxWidth }} transform transition-all sm:mx-auto"
+        class="relative w-full {{ $maxWidth }} transform transition-all sm:mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
