@@ -46,14 +46,20 @@ class AppointmentController extends Controller
 
     public function cancel(Appointment $appointment)
     {
-        // Ensure the user owns this appointment
+        // Ensure the user owns this appointment or is admin
         if ($appointment->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
             abort(403);
         }
 
-        $appointment->update(['status' => 'cancelled']);
+        // Distinguish between Client Cancel and Admin Decline
+        $status = Auth::user()->role === 'admin' ? 'declined' : 'cancelled';
+        $appointment->update(['status' => $status]);
 
-        return redirect()->back()->with('success', 'The consultation has been cancelled.');
+        $message = $status === 'declined' 
+            ? 'The consultation request has been declined.' 
+            : 'The consultation has been cancelled.';
+
+        return redirect()->back()->with('success', $message);
     }
 
     public function confirm(Appointment $appointment)
@@ -77,8 +83,16 @@ class AppointmentController extends Controller
 
     public function index()
     {
-        // Eager load the user to display client info in the Admin Sidebar
-        $appointments = Appointment::with('user')->orderBy('appointment_date', 'asc')->get();
+        // Order by most recent request (created_at) at the top
+        $appointments = Appointment::with('user')->latest()->get();
         return view('admin.appointments', compact('appointments'));
+    }
+
+    public function calendar()
+    {
+        $appointments = Appointment::whereNotIn('status', ['cancelled', 'declined'])
+            ->orderBy('appointment_date', 'asc')
+            ->get();
+        return view('admin.calendar', compact('appointments'));
     }
 }

@@ -41,9 +41,14 @@
             <div class="space-y-2">
                 <p x-show="sidebarOpen" 
                    class="px-4 text-[9px] font-black text-slate-400 tracking-[0.2em] mb-4">Consultation</p>
-                <x-sidebar-link href="{{ Auth::user()->role === 'admin' ? route('admin.appointments.index') : route('client.appointments') }}" :active="request()->routeIs('admin.appointments.*') || request()->routeIs('client.appointments')" icon="calendar">
+                <x-sidebar-link href="{{ Auth::user()->role === 'admin' ? route('admin.appointments.index') : route('client.appointments') }}" :active="request()->routeIs('admin.appointments.*') && !request()->routeIs('admin.calendar.index') || request()->routeIs('client.appointments')" icon="calendar">
                     Appointments
                 </x-sidebar-link>
+                @if(Auth::user()->role === 'admin')
+                    <x-sidebar-link href="{{ route('admin.calendar.index') }}" :active="request()->routeIs('admin.calendar.index')" icon="calendar">
+                        Schedule Calendar
+                    </x-sidebar-link>
+                @endif
                 @if(Auth::user()->role !== 'admin')
                     <x-sidebar-link href="{{ route('client.portfolio') }}" :active="request()->routeIs('client.portfolio')" icon="admin">
                         Studio Portfolio

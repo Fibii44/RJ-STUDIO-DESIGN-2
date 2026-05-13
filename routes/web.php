@@ -26,6 +26,16 @@ Route::get('/portfolio', [ProjectController::class, 'index'])->name('portfolio')
 Route::get('/portfolio/{project}', [ProjectController::class, 'show'])->name('portfolio.show');
 
 
+// Shared Auth Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+    
+    Route::get('/support', function() {
+        return view('support.index');
+    })->name('support');
+});
+
 //Client Route
 Route::middleware(['auth', 'verified', 'client'])->group(function () {
     Route::get('/client/dashboard', function () {
@@ -48,12 +58,6 @@ Route::middleware(['auth', 'verified', 'client'])->group(function () {
     // Appointment Booking Routes
     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
     Route::delete('/admin/portfolio/image/{image}', [ProjectController::class, 'destroyImage'])->name('admin.portfolio.image.destroy');
-    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
-    Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
-    
-    Route::get('/support', function() {
-        return view('support.index');
-    })->name('support');
 });
 
 
@@ -63,6 +67,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
         $totalUsers = \App\Models\User::where('role', '!=', 'admin')->count();
         $totalProjects = \App\Models\Project::count();
         $totalAppointments = \App\Models\Appointment::count();
+        $upcomingAppointments = \App\Models\Appointment::where('status', 'confirmed')->count();
+        $declinedAppointments = \App\Models\Appointment::where('status', 'declined')->count();
+        $latestAppointments = \App\Models\Appointment::latest()->take(5)->get();
         
         // Find if there's any pending or upcoming appointment
         $ongoingAppointment = \App\Models\Appointment::where('status', 'pending')
@@ -70,11 +77,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
             ->latest('appointment_date')
             ->first();
 
-        return view('admin.dashboard', compact('totalUsers', 'totalProjects', 'totalAppointments', 'ongoingAppointment'));
+        return view('admin.dashboard', compact('totalUsers', 'totalProjects', 'totalAppointments', 'upcomingAppointments', 'declinedAppointments', 'latestAppointments', 'ongoingAppointment'));
     })->name('admin.dashboard');
 
     // --- Appointment Management Routes ---
     Route::get('/admin/appointments', [AppointmentController::class, 'index'])->name('admin.appointments.index');
+    Route::get('/admin/calendar', [AppointmentController::class, 'calendar'])->name('admin.calendar.index');
     Route::patch('/admin/appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])->name('admin.appointments.confirm');
     Route::get('/admin/schedule', [\App\Http\Controllers\Admin\ScheduleController::class, 'index'])->name('admin.schedule.index');
     Route::post('/admin/schedule', [\App\Http\Controllers\Admin\ScheduleController::class, 'update'])->name('admin.schedule.update');

@@ -1,4 +1,4 @@
-<x-studio-layout title="{{ $project->title }} | RJ DESIGN STUDIO">
+<x-studio-layout :title="$project->title . ' | RJ DESIGN STUDIO'">
     <main class="min-h-screen bg-white" x-data='{ 
         activeImg: "", 
         currentIndex: 0,
@@ -27,11 +27,10 @@
         <div class="{{ Auth::check() ? 'pt-12' : 'pt-32' }} px-4 lg:px-8 relative flex items-center justify-center min-h-[40px]">
             <!-- Back Button (Absolute Left) -->
             <div class="absolute left-4 lg:left-8">
-                <a href="{{ route('portfolio') }}" class="inline-flex items-center gap-3 group text-slate-400 hover:text-sky-600 transition-all duration-300">
-                    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ url()->previous() == url()->current() ? route('portfolio') : url()->previous() }}" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-slate-100 text-slate-400 hover:text-sky-600 hover:border-sky-100 transition-all duration-300 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    <span class="text-[10px] font-black uppercase tracking-[0.3em]">Back to Portfolio</span>
                 </a>
             </div>
 

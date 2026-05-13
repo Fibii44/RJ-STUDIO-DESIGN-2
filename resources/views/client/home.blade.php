@@ -52,7 +52,7 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
             
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <div class="lg:col-span-3 relative h-[550px] rounded-[3.5rem] overflow-hidden shadow-premium group">
+                <a href="{{ route('portfolio.show', $recentProjects[0]->id) }}" class="lg:col-span-3 relative h-[550px] rounded-[3.5rem] overflow-hidden shadow-premium group block">
                     @if($recentProjects->count() > 0)
                         <img src="{{ asset($recentProjects[0]->image_path) }}" alt="{{ $recentProjects[0]->title }}" class="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/10 to-transparent flex flex-col justify-end p-12">
@@ -65,7 +65,7 @@
                             <p class="font-serif">No projects uploaded yet</p>
                         </div>
                     @endif
-                </div>
+                </a>
 
                 <div class="bg-white rounded-[3.5rem] p-10 border border-slate-100 shadow-sm flex flex-col justify-between">
                     <div>
@@ -76,7 +76,7 @@
                                 @foreach($appointments->take(3) as $appointment)
                                     <div class="p-5 rounded-3xl border {{ $appointment->status === 'confirmed' ? 'border-green-100 bg-green-50/30' : 'border-slate-100 bg-slate-50/50' }} transition-all hover:shadow-md">
                                         <div class="flex justify-between items-start mb-3">
-                                            <p class="text-xs font-black uppercase tracking-widest text-slate-900 leading-tight">{{ $appointment->service_type }}</p>
+                                            <p class="text-xs font-black tracking-widest text-slate-900 leading-tight">{{ $appointment->service_type }}</p>
                                             <span class="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $appointment->status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">
                                                 {{ $appointment->status }}
                                             </span>
@@ -115,22 +115,22 @@
                     <h3 class="font-serif text-3xl">Studio Showcase</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         @if($recentProjects->count() > 1)
-                        <div class="group cursor-pointer">
+                        <a href="{{ route('portfolio.show', $recentProjects[1]->id) }}" class="group cursor-pointer block">
                             <div class="aspect-video rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
                                 <img src="{{ asset($recentProjects[1]->image_path) }}" class="w-full h-full object-cover transition-all duration-700">
                             </div>
                             <h4 class="font-serif text-xl text-slate-900">{{ $recentProjects[1]->title }}</h4>
                             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">{{ $recentProjects[1]->category }}</p>
-                        </div>
+                        </a>
                         @endif
                         @if($recentProjects->count() > 2)
-                        <div class="group cursor-pointer">
+                        <a href="{{ route('portfolio.show', $recentProjects[2]->id) }}" class="group cursor-pointer block">
                             <div class="aspect-video rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
                                 <img src="{{ asset($recentProjects[2]->image_path) }}" class="w-full h-full object-cover transition-all duration-700">
                             </div>
                             <h4 class="font-serif text-xl text-slate-900">{{ $recentProjects[2]->title }}</h4>
                             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">{{ $recentProjects[2]->category }}</p>
-                        </div>
+                        </a>
                         @endif
                     </div>
                 </div>

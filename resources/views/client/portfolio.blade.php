@@ -90,7 +90,7 @@
                             <!-- Floating Info Badge -->
                             <div class="absolute top-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0 z-20">
                                 <div class="px-6 py-3 bg-slate-900 text-white rounded-2xl shadow-2xl flex flex-col gap-0.5 border border-white/10">
-                                    <h3 class="text-xs font-black tracking-[0.2em]">{{ $project->title }}</h3>
+                                    <h3 class="text-xs font-black tracking-[0.2em] leading-tight">{{ $project->title }}</h3>
                                     <p class="text-[8px] text-sky-400 font-bold uppercase tracking-[0.15em]">{{ $project->category }} • {{ $project->year }}</p>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                         </div>
                         
                         <div class="mt-6 px-4">
-                            <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">{{ $project->title }}</h3>
+                            <h3 class="text-sm font-black text-slate-900 tracking-widest">{{ $project->title }}</h3>
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{{ $project->location ?? 'N/A' }}</p>
                         </div>
                     </a>
