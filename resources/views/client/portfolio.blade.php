@@ -84,7 +84,7 @@
                          x-transition:enter-start="opacity-0 translate-y-8"
                          x-transition:enter-end="opacity-100 translate-y-0">
                         
-                        <div class="aspect-[16/10] rounded-[2.5rem] overflow-hidden bg-slate-50 relative shadow-sm group-hover:shadow-premium transition-all duration-700 border border-slate-100">
+                        <div class="aspect-[16/10] rounded-card overflow-hidden bg-slate-50 relative shadow-sm group-hover:shadow-premium transition-all duration-700 border border-slate-100">
                             <img src="{{ asset($project->image_path) }}" class="object-cover w-full h-full transition-all duration-1000 group-hover:scale-105">
                             
                             <!-- Floating Info Badge -->
@@ -116,7 +116,7 @@
                  x-transition:enter="transition ease-out duration-500"
                  x-transition:enter-start="opacity-0 translate-y-12"
                  class="py-32 flex flex-col items-center text-center">
-                <div class="w-20 h-20 bg-sky-50 rounded-[2.5rem] flex items-center justify-center text-sky-600 mb-8 border border-sky-100/50">
+                <div class="w-20 h-20 bg-sky-50 rounded-card flex items-center justify-center text-sky-600 mb-8 border border-sky-100/50">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                     </svg>

@@ -26,10 +26,10 @@
                 </div>
 
                 <div class="relative group">
-                    <div class="aspect-[4/5] rounded-[4rem] overflow-hidden shadow-premium rotate-2 group-hover:rotate-0 transition-all duration-1000 border-[12px] border-white relative z-10 bg-slate-50">
+                    <div class="aspect-[4/5] rounded-card overflow-hidden shadow-premium rotate-2 group-hover:rotate-0 transition-all duration-1000 border-[12px] border-white relative z-10 bg-slate-50">
                         <img src="{{ asset('images/home-pic.webp') }}" alt="Modern Architecture" class="w-full h-full object-cover transition-all duration-1000">
                     </div>
-                    <div class="absolute -inset-4 bg-sky-100 rounded-[5rem] -z-0 blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute -inset-4 bg-sky-100 rounded-card -z-0 blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 </div>
             </div>
         </header>
@@ -48,7 +48,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     @foreach($featuredProjects as $index => $project)
                     <div class="space-y-6 group {{ $index === 1 ? 'md:translate-y-12' : '' }}">
-                        <div class="aspect-square rounded-[3rem] overflow-hidden bg-slate-50 border border-slate-100 shadow-sm group-hover:shadow-xl transition-all duration-500">
+                        <div class="aspect-square rounded-card overflow-hidden bg-slate-50 border border-slate-100 shadow-sm group-hover:shadow-xl transition-all duration-500">
                             <img src="{{ asset($project->image_path) }}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110">
                         </div>
                         <h4 class="font-serif text-xl px-4">{{ $project->title }}</h4>

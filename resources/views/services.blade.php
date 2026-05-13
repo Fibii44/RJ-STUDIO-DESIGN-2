@@ -21,10 +21,10 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 items-stretch">
                 
                 <!-- Package 01 -->
-                <div class="p-12 rounded-[4rem] bg-white border border-slate-100 flex flex-col justify-between group hover:scale-[1.02] transition-all duration-500 hover:shadow-premium"
+                <div class="p-12 rounded-card bg-white border border-slate-100 flex flex-col justify-between group hover:scale-[1.02] transition-all duration-500 hover:shadow-premium"
                      x-show="loaded" x-transition:enter="transition ease-out duration-1000 delay-300" x-transition:enter-start="opacity-0 translate-y-12">
                     <div>
-                        <div class="w-16 h-16 rounded-3xl bg-sky-50 flex items-center justify-center text-sky-600 mb-10 group-hover:rotate-6 transition-transform duration-500">
+                        <div class="w-16 h-16 rounded-inner bg-sky-50 flex items-center justify-center text-sky-600 mb-10 group-hover:rotate-6 transition-transform duration-500">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                         </div>
                         
@@ -43,19 +43,19 @@
                         </ul>
                     </div>
                     <a href="{{ Auth::check() ? route('appointments.create', ['service' => 'Architectural Design']) : route('register') }}" 
-                       class="w-full py-6 rounded-3xl bg-slate-900 text-white text-center text-[10px] font-black uppercase tracking-[0.3em] hover:bg-sky-600 transition-all shadow-xl shadow-slate-900/10">
+                       class="w-full py-6 rounded-inner bg-slate-900 text-white text-center text-[10px] font-black uppercase tracking-[0.3em] hover:bg-sky-600 transition-all shadow-xl shadow-slate-900/10">
                        {{ Auth::check() ? 'Book Consultation' : 'Inquire for Design' }}
                     </a>
                 </div>
 
                 <!-- Package: Featured (Design & Build) -->
-                <div class="p-12 rounded-[4.5rem] bg-slate-900 text-white shadow-premium flex flex-col justify-between transform md:-translate-y-8 relative overflow-hidden group hover:scale-[1.03] transition-all duration-700"
+                <div class="p-12 rounded-card bg-slate-900 text-white shadow-premium flex flex-col justify-between transform md:-translate-y-8 relative overflow-hidden group hover:scale-[1.03] transition-all duration-700"
                      x-show="loaded" x-transition:enter="transition ease-out duration-1000 delay-400" x-transition:enter-start="opacity-0 translate-y-12">
                     
                     <div class="absolute top-0 right-0 w-72 h-72 bg-sky-600/20 rounded-full blur-3xl -z-0"></div>
                     
                     <div class="relative z-10">
-                        <div class="w-16 h-16 rounded-3xl bg-white/10 flex items-center justify-center text-sky-400 mb-10 group-hover:scale-110 transition-transform duration-500">
+                        <div class="w-16 h-16 rounded-inner bg-white/10 flex items-center justify-center text-sky-400 mb-10 group-hover:scale-110 transition-transform duration-500">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
 
@@ -78,16 +78,16 @@
                         </ul>
                     </div>
                     <a href="{{ Auth::check() ? route('appointments.create', ['service' => 'Design & Build']) : route('register') }}" 
-                       class="w-full py-7 rounded-[2.5rem] bg-sky-600 text-white text-center text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-sky-600 transition-all shadow-2xl relative z-10">
+                       class="w-full py-7 rounded-card bg-sky-600 text-white text-center text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-sky-600 transition-all shadow-2xl relative z-10">
                        {{ Auth::check() ? 'Start Your Masterpiece' : 'Start Full Project' }}
                     </a>
                 </div>
 
                 <!-- Package 02 -->
-                <div class="p-12 rounded-[4rem] bg-white border border-slate-100 flex flex-col justify-between group hover:scale-[1.02] transition-all duration-500 hover:shadow-premium"
+                <div class="p-12 rounded-card bg-white border border-slate-100 flex flex-col justify-between group hover:scale-[1.02] transition-all duration-500 hover:shadow-premium"
                      x-show="loaded" x-transition:enter="transition ease-out duration-1000 delay-500" x-transition:enter-start="opacity-0 translate-y-12">
                     <div>
-                        <div class="w-16 h-16 rounded-3xl bg-sky-50 flex items-center justify-center text-sky-600 mb-10 group-hover:-rotate-6 transition-transform duration-500">
+                        <div class="w-16 h-16 rounded-inner bg-sky-50 flex items-center justify-center text-sky-600 mb-10 group-hover:-rotate-6 transition-transform duration-500">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path></svg>
                         </div>
                         
@@ -106,7 +106,7 @@
                         </ul>
                     </div>
                     <a href="{{ Auth::check() ? route('appointments.create', ['service' => 'Construction']) : route('register') }}" 
-                       class="w-full py-6 rounded-3xl bg-slate-900 text-white text-center text-[10px] font-black uppercase tracking-[0.3em] hover:bg-sky-600 transition-all shadow-xl shadow-slate-900/10">
+                       class="w-full py-6 rounded-inner bg-slate-900 text-white text-center text-[10px] font-black uppercase tracking-[0.3em] hover:bg-sky-600 transition-all shadow-xl shadow-slate-900/10">
                        {{ Auth::check() ? 'Book Consultation' : 'Inquire for Build' }}
                     </a>
                 </div>

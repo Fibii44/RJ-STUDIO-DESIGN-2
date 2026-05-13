@@ -53,6 +53,8 @@ Route::middleware(['auth', 'verified', 'client'])->group(function () {
         return view('client.appointments', compact('appointments'));
     })->middleware(['auth', 'verified'])->name('client.appointments');
 
+    Route::get('/client/calendar', [AppointmentController::class, 'clientCalendar'])->name('client.calendar.index');
+
     Route::get('/client/portfolio', [ProjectController::class, 'portalIndex'])->name('client.portfolio');
 
     // Appointment Booking Routes

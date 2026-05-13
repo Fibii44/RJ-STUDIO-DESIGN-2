@@ -95,4 +95,15 @@ class AppointmentController extends Controller
             ->get();
         return view('admin.calendar', compact('appointments'));
     }
+
+    public function clientCalendar()
+    {
+        // Only get the current user's appointments that are not cancelled or declined
+        $appointments = Auth::user()->appointments()
+            ->whereNotIn('status', ['cancelled', 'declined'])
+            ->orderBy('appointment_date', 'asc')
+            ->get();
+            
+        return view('client.calendar', compact('appointments'));
+    }
 }

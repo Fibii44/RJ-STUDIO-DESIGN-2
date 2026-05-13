@@ -6,7 +6,7 @@
          class="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
         
         <div @click.away="show = false" 
-             class="bg-white w-full max-w-sm rounded-[3rem] p-10 shadow-2xl border border-slate-100 text-center animate-in zoom-in duration-300">
+             class="bg-white w-full max-w-sm rounded-card p-10 shadow-2xl border border-slate-100 text-center animate-in zoom-in duration-300">
             
             <div class="w-20 h-20 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg class="w-10 h-10 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
             
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <a href="{{ route('portfolio.show', $recentProjects[0]->id) }}" class="lg:col-span-3 relative h-[550px] rounded-[3.5rem] overflow-hidden shadow-premium group block">
+                <a href="{{ route('portfolio.show', $recentProjects[0]->id) }}" class="lg:col-span-3 relative h-[550px] rounded-card overflow-hidden shadow-premium group block">
                     @if($recentProjects->count() > 0)
                         <img src="{{ asset($recentProjects[0]->image_path) }}" alt="{{ $recentProjects[0]->title }}" class="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/10 to-transparent flex flex-col justify-end p-12">
@@ -67,7 +67,7 @@
                     @endif
                 </a>
 
-                <div class="bg-white rounded-[3.5rem] p-10 border border-slate-100 shadow-sm flex flex-col justify-between">
+                <div class="bg-white rounded-card p-10 border border-slate-100 shadow-sm flex flex-col justify-between">
                     <div>
                         <h4 class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-8">Upcoming Appointments</h4>
                         
@@ -77,7 +77,10 @@
                                     <div class="p-5 rounded-3xl border {{ $appointment->status === 'confirmed' ? 'border-green-100 bg-green-50/30' : 'border-slate-100 bg-slate-50/50' }} transition-all hover:shadow-md">
                                         <div class="flex justify-between items-start mb-3">
                                             <p class="text-xs font-black tracking-widest text-slate-900 leading-tight">{{ $appointment->service_type }}</p>
-                                            <span class="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $appointment->status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">
+                                            <span class="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md 
+                                                @if($appointment->status === 'confirmed') bg-emerald-100 text-emerald-700 
+                                                @elseif(in_array($appointment->status, ['declined', 'cancelled'])) bg-rose-100 text-rose-700 
+                                                @else bg-amber-100 text-amber-700 @endif">
                                                 {{ $appointment->status }}
                                             </span>
                                         </div>
@@ -95,7 +98,7 @@
                                 @endforeach
                             </div>
                         @else
-                            <div class="text-center py-12 bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
+                            <div class="text-center py-12 bg-slate-50 rounded-card border border-dashed border-slate-200">
                                 <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">No scheduled appointments</p>
                             </div>
                         @endif
@@ -116,7 +119,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         @if($recentProjects->count() > 1)
                         <a href="{{ route('portfolio.show', $recentProjects[1]->id) }}" class="group cursor-pointer block">
-                            <div class="aspect-video rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
+                            <div class="aspect-video rounded-inner overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
                                 <img src="{{ asset($recentProjects[1]->image_path) }}" class="w-full h-full object-cover transition-all duration-700">
                             </div>
                             <h4 class="font-serif text-xl text-slate-900">{{ $recentProjects[1]->title }}</h4>
@@ -125,7 +128,7 @@
                         @endif
                         @if($recentProjects->count() > 2)
                         <a href="{{ route('portfolio.show', $recentProjects[2]->id) }}" class="group cursor-pointer block">
-                            <div class="aspect-video rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
+                            <div class="aspect-video rounded-inner overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500 border border-slate-100">
                                 <img src="{{ asset($recentProjects[2]->image_path) }}" class="w-full h-full object-cover transition-all duration-700">
                             </div>
                             <h4 class="font-serif text-xl text-slate-900">{{ $recentProjects[2]->title }}</h4>
@@ -136,7 +139,7 @@
                 </div>
 
                 <div class="space-y-10">
-                    <div class="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
+                    <div class="bg-slate-900 rounded-card p-10 text-white shadow-2xl relative overflow-hidden">
                          <p class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-400 mb-6">Studio Note</p>
                          <p class="text-lg font-serif italic leading-relaxed text-slate-200">"Welcome to the portal. Here you can track your modern villa's progress and schedule meetings with Feby Angela."</p>
                          <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>

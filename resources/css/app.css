@@ -11,7 +11,20 @@
     --color-sky-dark: #075985;
     
     /* Modern Palette */
-    --color-slate-custom: #1e293b;
+    --color-slate-custom: #1e293b;}
+
+:root {
+    /* Global Rounding Tokens */
+    --card-radius: 1.5rem;
+    --inner-radius: 1.25rem;
+    --button-radius: 1rem;
+}
+
+@layer utilities {
+    /* Design System Utilities */
+    .rounded-card { border-radius: var(--card-radius) !important; }
+    .rounded-inner { border-radius: var(--inner-radius) !important; }
+    .rounded-btn { border-radius: var(--button-radius) !important; }
 }
 
 @layer base {

@@ -49,7 +49,7 @@
 
         <!-- Cinematic Hero Image -->
         <section class="px-6 lg:px-12">
-            <div class="aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl bg-slate-100 relative group cursor-zoom-in"
+            <div class="aspect-[21/9] rounded-card overflow-hidden shadow-2xl bg-slate-100 relative group cursor-zoom-in"
                  @click="openModal(0)">
                 <img src="{{ asset($project->image_path) }}" class="w-full h-full object-cover transition-transform duration-[30s] ease-linear group-hover:scale-110">
                 <div class="absolute inset-0 bg-slate-900/5"></div>
@@ -96,7 +96,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     @foreach($project->images as $index => $image)
-                        <div class="group relative rounded-2xl overflow-hidden shadow-sm bg-white border border-slate-100 transition-all duration-700 hover:shadow-2xl cursor-zoom-in"
+                        <div class="group relative rounded-inner overflow-hidden shadow-sm bg-white border border-slate-100 transition-all duration-700 hover:shadow-2xl cursor-zoom-in"
                              @click="openModal({{ $index + 1 }})">
                             <img src="{{ asset($image->path) }}" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105">
                             

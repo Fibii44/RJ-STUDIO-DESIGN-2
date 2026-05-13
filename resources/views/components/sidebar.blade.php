@@ -48,6 +48,10 @@
                     <x-sidebar-link href="{{ route('admin.calendar.index') }}" :active="request()->routeIs('admin.calendar.index')" icon="calendar">
                         Schedule Calendar
                     </x-sidebar-link>
+                @else
+                    <x-sidebar-link href="{{ route('client.calendar.index') }}" :active="request()->routeIs('client.calendar.index')" icon="calendar">
+                        Schedule Calendar
+                    </x-sidebar-link>
                 @endif
                 @if(Auth::user()->role !== 'admin')
                     <x-sidebar-link href="{{ route('client.portfolio') }}" :active="request()->routeIs('client.portfolio')" icon="admin">

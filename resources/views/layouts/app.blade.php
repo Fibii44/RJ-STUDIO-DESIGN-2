@@ -15,14 +15,6 @@
         <!-- Flatpickr (Calendar) -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <style>
-            :root {
-                --card-radius: 1.5rem;
-                --inner-radius: 1.25rem;
-                --button-radius: 1rem;
-            }
-            .rounded-card { border-radius: var(--card-radius) !important; }
-            .rounded-inner { border-radius: var(--inner-radius) !important; }
-            .rounded-btn { border-radius: var(--button-radius) !important; }
 
             .flatpickr-calendar {
                 background: #ffffff;
@@ -365,5 +357,6 @@
                 }
             };
         </script>
+        @stack('scripts')
     </body>
 </html>

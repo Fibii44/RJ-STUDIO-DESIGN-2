@@ -14,10 +14,10 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-40">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div class="relative">
-                    <div class="aspect-[4/5] rounded-[4rem] overflow-hidden shadow-premium border border-slate-100">
+                    <div class="aspect-[4/5] rounded-card overflow-hidden shadow-premium border border-slate-100">
                         <img src="{{ asset('images/about-pic.webp') }}" alt="RJ Studio Workspace" class="w-full h-full object-cover">
                     </div>
-                    <div class="absolute -bottom-10 -right-10 p-12 bg-slate-900 text-white rounded-[3rem] shadow-2xl hidden md:block border-[12px] border-white">
+                    <div class="absolute -bottom-10 -right-10 p-12 bg-slate-900 text-white rounded-card shadow-2xl hidden md:block border-[12px] border-white">
                         <p class="text-6xl font-serif">2024</p>
                         <p class="text-[10px] font-black uppercase tracking-[0.4em] text-sky-400 mt-3">Studio Established</p>
                     </div>
@@ -33,12 +33,12 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 pt-6">
-                        <div class="p-10 rounded-[3rem] bg-white shadow-sm border border-slate-100 transition-all hover:shadow-premium group">
+                        <div class="p-10 rounded-card bg-white shadow-sm border border-slate-100 transition-all hover:shadow-premium group">
                             <span class="inline-block px-4 py-1.5 bg-sky-50 text-sky-600 rounded-full text-[9px] font-black uppercase tracking-[0.2em] mb-6">Service 01</span>
                             <p class="font-serif text-2xl text-slate-900 mb-2">Architectural Design</p>
                             <p class="text-sm text-slate-400 leading-relaxed">Bespoke planning, 3D modeling, and technical blueprints.</p>
                         </div>
-                        <div class="p-10 rounded-[3rem] bg-white shadow-sm border border-slate-100 transition-all hover:shadow-premium group">
+                        <div class="p-10 rounded-card bg-white shadow-sm border border-slate-100 transition-all hover:shadow-premium group">
                             <span class="inline-block px-4 py-1.5 bg-sky-50 text-sky-600 rounded-full text-[9px] font-black uppercase tracking-[0.2em] mb-6">Service 02</span>
                             <p class="font-serif text-2xl text-slate-900 mb-2">Professional Build</p>
                             <p class="text-sm text-slate-400 leading-relaxed">Realizing the design through expert engineering.</p>
@@ -47,8 +47,8 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-[5rem] border border-slate-100 p-12 lg:p-24 flex flex-col lg:flex-row items-center gap-20 shadow-premium relative">
-                <div class="w-64 h-64 lg:w-96 lg:h-96 rounded-[4rem] overflow-hidden border-[15px] border-slate-50 shadow-inner shrink-0 rotate-3">
+            <div class="bg-white rounded-card border border-slate-100 p-12 lg:p-24 flex flex-col lg:flex-row items-center gap-20 shadow-premium relative">
+                <div class="w-64 h-64 lg:w-96 lg:h-96 rounded-card overflow-hidden border-[15px] border-slate-50 shadow-inner shrink-0 rotate-3">
                     <img src="{{ asset('/images/RJ-pic.webp') }}" alt="Randolf Jan H. Felices" class="w-full h-full object-cover transition-all duration-1000 scale-110">
                 </div>
                 <div class="text-center lg:text-left space-y-8 relative z-10">
