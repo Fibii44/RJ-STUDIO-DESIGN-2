@@ -5,6 +5,10 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/up', function () {
+    return response('OK', 200);
+});
+
 Route::get('/', function () {
     if (Auth::check()) {
         return Auth::user()->role === 'admin' 
