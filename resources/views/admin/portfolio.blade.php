@@ -9,10 +9,11 @@
         fileCount: 0,
         descriptionText: "",
         isUploading: false,
-        selectedProject: { id: null, title: "", category: "", year: "", images: [] },
+        selectedProject: { id: null, title: "", category: "", year: "", images: [], costs: [] },
         projectToDelete: null,
         imageToDelete: null,
         allProjects: @json($projects->items()),
+        materials: @json($materials),
 
         get availableYears() {
             const years = [...new Set(this.allProjects.map(p => p.year))].sort((a, b) => b - a);
@@ -125,7 +126,7 @@
                      x-transition:leave-end="opacity-0 scale-95 translate-y-8"
                      @click.stop>
                     
-                    <div class="p-8 lg:p-10 pb-4 flex justify-between items-start border-b border-slate-50">
+                    <div class="p-6 lg:p-8 lg:pb-3 pb-3 flex justify-between items-start border-b border-slate-50">
                         <div class="space-y-1">
                             <h4 class="font-serif text-3xl text-slate-900">Upload <span class="italic text-sky-600">Project</span></h4>
                             <p class="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em]">Curation • Architectural Bundle</p>
@@ -136,11 +137,11 @@
                     </div>
                     
                     <form id="uploadProjectForm" action="{{ route('admin.portfolio.store') }}" method="POST" enctype="multipart/form-data" 
-                          class="flex-1 overflow-y-auto p-8 lg:p-10 pt-2 custom-scrollbar" 
+                          class="flex-1 overflow-y-auto p-6 lg:p-8 lg:pt-3 pt-3 custom-scrollbar" 
                           @submit="isUploading = true">
                         @csrf
-                        <div class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div class="md:col-span-2 space-y-1.5">
                                     <label class="text-[10px] font-bold text-slate-400 ml-2">Project Title</label>
                                     <input type="text" name="title" required placeholder="Ex: Minimalist Glass Villa" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
@@ -154,7 +155,7 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div class="md:col-span-2 space-y-1.5">
                                     <label class="text-[10px] font-bold text-slate-400 ml-2">Location (Optional)</label>
                                     <input type="text" name="location" placeholder="Ex: Bukidnon, Philippines" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs px-4">
@@ -179,7 +180,7 @@
                                           class="w-full rounded-2xl border-slate-100 bg-slate-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-xs p-4 min-h-[80px] max-h-[160px]"></textarea>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- Main Cover Upload -->
                                 <div class="space-y-2" x-data="{ coverPreview: null }">
                                     <div class="flex justify-between items-center px-2">
@@ -233,7 +234,7 @@
                         </div>
                     </form>
 
-                    <div class="p-8 lg:p-10 pt-6 border-t border-slate-50 flex justify-center bg-white">
+                    <div class="p-6 lg:p-8 lg:pt-4 pt-4 border-t border-slate-50 flex justify-center bg-white">
                         <button type="submit" form="uploadProjectForm" 
                                 :disabled="isUploading || fileCount > 10"
                                 class="px-12 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-sky-600 transition-all shadow-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -248,7 +249,7 @@
         </template>
 
         <!-- Projects Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div x-show="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <template x-for="(project, index) in displayedProjects" :key="project.id">
                 <div class="group bg-white rounded-[2.5rem] p-4 border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
                     
@@ -278,8 +279,35 @@
             </template>
         </div>
 
+        <!-- Empty State -->
+        <div x-show="filteredProjects.length === 0" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="flex flex-col items-center justify-center py-20 px-6 bg-slate-50/50 rounded-[2.5rem] border border-dashed border-slate-200 text-center">
+            <div class="w-20 h-20 bg-sky-50/60 rounded-full flex items-center justify-center mb-6">
+                <svg class="w-10 h-10 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+            </div>
+            
+            <h3 class="text-xl font-serif text-slate-900 mb-2">
+                No Projects Found
+            </h3>
+            
+            <p class="text-xs text-slate-400 max-w-sm mb-8 leading-relaxed">
+                Add your first project to get started.
+            </p>
+            
+            <button @click="showUpload = true" 
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-sky-600 transition shadow-xl">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                <span>Add New Work</span>
+            </button>
+        </div>
+
         <!-- Studio Styled Pagination -->
-        <div class="mt-12 py-8 border-t border-slate-50">
+        <div x-show="filteredProjects.length > 0" class="mt-12 py-8 border-t border-slate-50">
             {{ $projects->links() }}
         </div>
 
@@ -287,11 +315,10 @@
             <div x-show="bundleModal" x-cloak class="fixed inset-0 z-[250] flex items-center justify-center p-6 md:p-12">
                 <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-500" @click="bundleModal = false"></div>
                 
-                <form :action="`/admin/portfolio/${selectedProject.id}`" method="POST" enctype="multipart/form-data" class="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-white/20" @click.stop>
+                <div class="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-white/20" @click.stop>
                     @csrf @method('PATCH')
-                    
-                    <!-- Left: Bundle Preview -->
-                    <div class="flex-1 p-8 lg:p-12 overflow-y-auto custom-scrollbar bg-slate-50/30">
+                                       <!-- Left: Bundle Preview -->
+                    <div class="flex-1 p-6 lg:p-8 overflow-y-auto custom-scrollbar bg-slate-50/30">
                          <div class="flex justify-between items-center mb-10">
                             <div class="space-y-1">
                                 <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Project Perspectives</h3>
@@ -333,15 +360,19 @@
                         <div class="flex-1 flex flex-col h-full">
                             
                             <!-- Header -->
-                            <div class="p-8 lg:p-10 pb-6 flex justify-between items-start border-b border-slate-50/50">
-                                <h2 class="text-2xl font-serif text-slate-900 leading-tight">Edit <span class="text-sky-600 italic">Project</span></h2>
+                            <div class="p-6 lg:p-8 lg:pb-3 pb-3 flex justify-between items-start border-b border-slate-50/50">
+                                <h2 class="text-2xl font-serif text-slate-900 leading-tight">Project <span class="text-sky-600 italic">Management</span></h2>
                                 <button type="button" @click="bundleModal = false" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all text-slate-400">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                                 </button>
                             </div>
 
+
                             <!-- Scrollable Body -->
-                            <div class="flex-1 overflow-y-auto p-8 lg:p-10 space-y-6 custom-scrollbar">
+                            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                                <!-- Details View -->
+                                <form id="editProjectForm" :action="'/admin/portfolio/' + selectedProject.id" method="POST" enctype="multipart/form-data" class="p-6 lg:p-8 lg:pt-3 pt-3 space-y-4">
+                                    @csrf @method('PATCH')
                                 <div class="space-y-1.5">
                                     <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Project Title</label>
                                     <input type="text" name="title" x-model="selectedProject.title" class="w-full h-11 rounded-xl border-slate-100 bg-slate-50 text-xs px-4 focus:ring-4 focus:ring-sky-500/10 transition-all">
@@ -374,24 +405,25 @@
                                             <span x-text="selectedProject.description?.length || 0"></span>/1500
                                         </span>
                                     </div>
-                                    <textarea name="description" x-model="selectedProject.description" rows="3" placeholder="Briefly describe the architectural concept..." class="w-full rounded-2xl border-slate-100 bg-slate-50 text-xs p-4 focus:ring-4 focus:ring-sky-500/10 transition-all min-h-[80px] max-h-[160px]"></textarea>
+                                    <textarea name="description" x-model="selectedProject.description" rows="3" placeholder="Briefly describe the architectural vision..." class="w-full rounded-2xl border-slate-100 bg-slate-50 text-xs p-4 focus:ring-4 focus:ring-sky-500/10 transition-all min-h-[80px] max-h-[160px]"></textarea>
                                 </div>
 
+                                </form>
 
                             </div>
 
                             <!-- Footer (Sticky/Fixed at bottom of modal) -->
-                            <div class="p-8 lg:p-10 border-t border-slate-50 bg-white flex gap-3">
+                            <div class="p-6 lg:p-8 border-t border-slate-50 bg-white flex gap-3">
                                 <button type="button" @click="bundleModal = false" class="flex-1 py-4 bg-slate-50 text-slate-400 rounded-xl font-bold uppercase text-[9px] tracking-widest hover:bg-slate-100 transition-all">
                                     Cancel
                                 </button>
-                                <button type="submit" class="flex-[2] py-4 bg-slate-900 text-white rounded-xl font-bold uppercase text-[9px] tracking-[0.2em] shadow-xl hover:bg-sky-600 transition-all">
-                                    Save All Changes
+                                <button type="submit" form="editProjectForm" class="flex-[2] py-4 bg-slate-900 text-white rounded-xl font-bold uppercase text-[9px] tracking-[0.2em] shadow-xl hover:bg-sky-600 transition-all">
+                                    Save Project Details
                                 </button>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </template>
         <template x-teleport="body">

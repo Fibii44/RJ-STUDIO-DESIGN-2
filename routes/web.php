@@ -63,7 +63,6 @@ Route::middleware(['auth', 'verified', 'client'])->group(function () {
 
     // Appointment Booking Routes
     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
-    Route::delete('/admin/portfolio/image/{image}', [ProjectController::class, 'destroyImage'])->name('admin.portfolio.image.destroy');
 });
 
 
@@ -111,6 +110,35 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     // Delete specific image from bundle
     Route::delete('/admin/portfolio/image/{image}', [ProjectController::class, 'destroyImage'])->name('admin.portfolio.image.destroy');
+
+    // Financial Overview (Dedicated Construction Projects)
+    Route::get('/admin/budgets', [\App\Http\Controllers\Admin\ConstructionProjectController::class, 'index'])->name('admin.budgets.index');
+    Route::post('/admin/budgets', [\App\Http\Controllers\Admin\ConstructionProjectController::class, 'store'])->name('admin.budgets.store');
+    Route::get('/admin/budgets/{project}', [\App\Http\Controllers\Admin\ConstructionProjectController::class, 'show'])->name('admin.budgets.show');
+    Route::patch('/admin/budgets/{project}/update', [\App\Http\Controllers\Admin\ConstructionProjectController::class, 'update'])->name('admin.budgets.update');
+    Route::delete('/admin/budgets/{project}', [\App\Http\Controllers\Admin\ConstructionProjectController::class, 'destroy'])->name('admin.budgets.destroy');
+
+    // --- Material Management Routes ---
+    Route::resource('/admin/materials', \App\Http\Controllers\Admin\MaterialController::class)->names('admin.materials');
+
+    // --- Project Cost Management Routes ---
+    Route::post('/admin/projects/{project}/costs', [\App\Http\Controllers\Admin\ProjectCostController::class, 'store'])->name('admin.projects.costs.store');
+    Route::get('/admin/projects/{project}/costs', function(\App\Models\ConstructionProject $project) {
+        return redirect()->route('admin.budgets.show', $project);
+    });
+    // Project Labor Costs
+    Route::get('/admin/labors', [\App\Http\Controllers\Admin\ProjectLaborController::class, 'index'])->name('admin.labors.index');
+    Route::post('/admin/projects/{project}/labors', [\App\Http\Controllers\Admin\ProjectLaborController::class, 'store'])->name('admin.projects.labors.store');
+    Route::patch('/admin/labors/{labor}', [\App\Http\Controllers\Admin\ProjectLaborController::class, 'update'])->name('admin.labors.update');
+    Route::delete('/admin/labors/{labor}', [\App\Http\Controllers\Admin\ProjectLaborController::class, 'destroy'])->name('admin.labors.destroy');
+
+    Route::patch('/admin/costs/{cost}', [\App\Http\Controllers\Admin\ProjectCostController::class, 'update'])->name('admin.costs.update');
+    Route::delete('/admin/costs/{cost}', [\App\Http\Controllers\Admin\ProjectCostController::class, 'destroy'])->name('admin.costs.destroy');
+
+    // Project Expenses (Miscellaneous)
+    Route::post('/admin/projects/{project}/expenses', [\App\Http\Controllers\Admin\ProjectExpenseController::class, 'store'])->name('admin.projects.expenses.store');
+    Route::patch('/admin/expenses/{expense}', [\App\Http\Controllers\Admin\ProjectExpenseController::class, 'update'])->name('admin.expenses.update');
+    Route::delete('/admin/expenses/{expense}', [\App\Http\Controllers\Admin\ProjectExpenseController::class, 'destroy'])->name('admin.expenses.destroy');
 });
 
 Route::middleware('auth')->group(function () {

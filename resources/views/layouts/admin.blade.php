@@ -13,13 +13,34 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         :root {
-            --card-radius: 1.5rem;
-            --inner-radius: 1.25rem;
-            --button-radius: 1rem;
+            --card-radius: 1.25rem;
+            --inner-radius: 0.75rem;
+            --button-radius: 0.75rem;
         }
         .rounded-card { border-radius: var(--card-radius) !important; }
         .rounded-inner { border-radius: var(--inner-radius) !important; }
         .rounded-btn { border-radius: var(--button-radius) !important; }
+        [x-cloak] { display: none !important; }
+
+        /* Luxury Scrollbar Logic */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .luxury-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .luxury-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .luxury-scroll::-webkit-scrollbar-thumb {
+            background-color: #E2E8F0;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+        .luxury-scroll::-webkit-scrollbar-thumb:hover {
+            background-color: #CBD5E1;
+        }
     </style>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -60,39 +81,7 @@
     </div>
     @auth
     <!-- Global Confirmation Modal -->
-    <x-modal name="confirm-modal" maxWidth="sm">
-        <div x-data="{ 
-            title: 'Confirm Action', 
-            message: 'Are you sure you want to proceed?', 
-            confirmButton: 'Confirm',
-            action: null,
-            init() {
-                window.addEventListener('open-confirm', (e) => {
-                    this.title = e.detail.title || 'Confirm Action';
-                    this.message = e.detail.message || 'Are you sure?';
-                    this.confirmButton = e.detail.confirmButton || 'Confirm';
-                    this.action = e.detail.action;
-                    $dispatch('open-modal', 'confirm-modal');
-                });
-            },
-            proceed() {
-                if (this.action) this.action();
-                $dispatch('close-modal', 'confirm-modal');
-            }
-        }" class="p-8 text-center">
-            <div class="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 mx-auto mb-6">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            </div>
-            
-            <h3 class="font-serif text-2xl text-slate-900 mb-2" x-text="title"></h3>
-            <p class="text-sm text-slate-500 mb-8 leading-relaxed" x-text="message"></p>
-            
-            <div class="flex flex-col gap-3">
-                <button @click="proceed()" class="w-full py-4 bg-red-500 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-red-600 shadow-lg shadow-red-200 transition-all" x-text="confirmButton"></button>
-                <button @click="$dispatch('close-modal', 'confirm-modal')" class="w-full py-4 bg-slate-100 text-slate-500 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 transition-all">Cancel</button>
-            </div>
-        </div>
-    </x-modal>
+    <x-confirmation-modal />
     @endauth
     @stack('scripts')
 </body>

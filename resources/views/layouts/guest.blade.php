@@ -65,7 +65,7 @@
                     </div>
 
                     <!-- Auth Card -->
-                    <div class="w-full bg-white shadow-premium rounded-[3.5rem] border border-slate-100 p-12 lg:p-14 relative overflow-hidden">
+                    <div class="w-full bg-white shadow-premium rounded-card border border-slate-100 p-12 lg:p-14 relative overflow-hidden">
                         <!-- Subtle background detail -->
                         <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-50 rounded-full blur-3xl opacity-50"></div>
                         

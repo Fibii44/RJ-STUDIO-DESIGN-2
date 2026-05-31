@@ -9,13 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void {
-        Schema::create('projects', function (Blueprint $table) {
+    public function up(): void
+    {
+        Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('category'); 
-            $table->string('year');
-            $table->string('image_path');
+            $table->string('name');
+            $table->string('unit'); // Gallon, Bag, pc, etc.
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('materials');
     }
 };

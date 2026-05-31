@@ -51,8 +51,9 @@ $maxWidth = [
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
     x-show="show"
+    x-cloak
+    style="display: none;"
     class="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden px-4 py-6 sm:px-0"
-    style="display: {{ $show ? 'block' : 'none' }};"
 >
     <div
         x-show="show"
@@ -70,7 +71,7 @@ $maxWidth = [
 
     <div
         x-show="show"
-        class="relative w-full {{ $maxWidth }} transform transition-all sm:mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden"
+        class="relative w-full {{ $maxWidth }} max-h-[90vh] transform transition-all sm:mx-auto bg-white rounded-card shadow-2xl flex flex-col overflow-hidden border border-white/20"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -78,6 +79,25 @@ $maxWidth = [
         x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
     >
-        {{ $slot }}
+        @if(isset($header))
+            <div class="px-8 lg:px-10 pt-8 pb-3 border-b border-slate-50 bg-slate-50/10 flex justify-between items-start">
+                <div class="flex-1">
+                    {{ $header }}
+                </div>
+                <button @click="show = false" class="ml-4 w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        @endif
+
+        <div class="flex-1 overflow-y-auto luxury-scroll px-8 lg:px-10 pt-4 pb-10">
+            {{ $slot }}
+        </div>
+
+        @if(isset($footer))
+            <div class="px-8 lg:px-10 py-8 border-t border-slate-50 bg-white">
+                {{ $footer }}
+            </div>
+        @endif
     </div>
 </div>

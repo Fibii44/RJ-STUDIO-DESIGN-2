@@ -72,8 +72,14 @@ class ProjectController extends Controller
     public function adminIndex()
     {
         // Use pagination to keep browser memory light and prevent "Aw Snap" crashes
-        $projects = Project::with('images')->orderBy('year', 'desc')->orderBy('created_at', 'desc')->paginate(12); 
-        return view('admin.portfolio', compact('projects'));
+        $projects = Project::with(['images'])
+            ->orderBy('year', 'desc') 
+            ->orderBy('created_at', 'desc')
+            ->paginate(12); 
+            
+        $materials = \App\Models\Material::orderBy('name')->get();
+        
+        return view('admin.portfolio', compact('projects', 'materials'));
     }
 
     public function store(StoreProjectRequest $request)
@@ -188,4 +194,5 @@ class ProjectController extends Controller
 
         return back()->with('success', 'Image removed from bundle.');
     }
+
 }

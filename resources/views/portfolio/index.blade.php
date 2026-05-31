@@ -136,6 +136,7 @@
             </div>
 
             <!-- Empty State -->
+            @if($projects->isNotEmpty())
             <div x-show="filteredProjects.length === 0" 
                  x-cloak
                  x-transition:enter="transition ease-out duration-500"
@@ -153,6 +154,7 @@
                     View All Works
                 </button>
             </div>
+            @endif
 
             {{-- Special Case: No Projects at all --}}
             @if($projects->isEmpty())
