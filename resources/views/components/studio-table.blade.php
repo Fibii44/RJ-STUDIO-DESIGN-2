@@ -5,6 +5,7 @@
     currentPage: 1,
     totalRows: 0,
     rows: [],
+    searchQuery: '',
     
     init() {
         this.refresh();
@@ -14,7 +15,19 @@
     },
     
     refresh() {
-        this.rows = Array.from(this.$refs.tbody.querySelectorAll('tr:not(.no-data)'));
+        const allRows = Array.from(this.$refs.tbody.querySelectorAll('tr:not(.no-data)'));
+        this.rows = allRows.filter(row => {
+            if (!this.searchQuery) return true;
+            return row.textContent.toLowerCase().includes(this.searchQuery.toLowerCase());
+        });
+
+        // Hide rows that don't match search query
+        allRows.forEach(row => {
+            if (!this.rows.includes(row)) {
+                row.style.display = 'none';
+            }
+        });
+
         this.totalRows = this.rows.length;
         if (this.currentPage > this.totalPages && this.totalPages > 0) {
             this.currentPage = this.totalPages;
@@ -68,7 +81,7 @@ x-init="init()"
             </div>
 
             @if(isset($filter))
-                <div class="w-full md:w-80">
+                <div class="w-full md:w-80" @input="searchQuery = $event.target.value; currentPage = 1; refresh()">
                     {{ $filter }}
                 </div>
             @endif

@@ -94,6 +94,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // --- Client Management Routes ---
     Route::get('/admin/clients', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.clients.index');
+    Route::post('/admin/clients', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.clients.store');
+    Route::get('/admin/clients/{client}', [\App\Http\Controllers\Admin\UserController::class, 'show'])->name('admin.clients.show');
 
     // --- Portfolio Management Routes ---
     Route::get('/admin/portfolio', [ProjectController::class, 'adminIndex'])->name('admin.portfolio.index');
@@ -127,7 +129,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return redirect()->route('admin.budgets.show', $project);
     });
     // Project Labor Costs
-    Route::get('/admin/labors', [\App\Http\Controllers\Admin\ProjectLaborController::class, 'index'])->name('admin.labors.index');
     Route::post('/admin/projects/{project}/labors', [\App\Http\Controllers\Admin\ProjectLaborController::class, 'store'])->name('admin.projects.labors.store');
     Route::patch('/admin/labors/{labor}', [\App\Http\Controllers\Admin\ProjectLaborController::class, 'update'])->name('admin.labors.update');
     Route::delete('/admin/labors/{labor}', [\App\Http\Controllers\Admin\ProjectLaborController::class, 'destroy'])->name('admin.labors.destroy');

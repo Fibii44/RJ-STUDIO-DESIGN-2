@@ -163,7 +163,48 @@
             </div>
 
             <div class="bg-white rounded-card border border-slate-100 shadow-sm overflow-hidden">
-                <div class="overflow-x-auto">
+                <!-- Mobile List (Visible on mobile, hidden on desktop) -->
+                <div class="block md:hidden divide-y divide-slate-100">
+                    <template x-for="appointment in paginatedAppointments" :key="appointment.id">
+                        <div class="p-6 space-y-4 hover:bg-slate-50/50 cursor-pointer" @click="openDetails(appointment)">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-sky-50 rounded-inner flex flex-col items-center justify-center border border-sky-100/50">
+                                        <span class="text-[8px] font-bold text-sky-600 uppercase" x-text="new Date(appointment.appointment_date).toLocaleString('en-US', { month: 'short' })"></span>
+                                        <span class="text-sm font-bold text-sky-900 leading-none" x-text="new Date(appointment.appointment_date).getDate()"></span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold text-slate-900" x-text="formatTime(appointment.appointment_date)"></p>
+                                        <p class="text-[9px] text-slate-400 font-medium" x-text="new Date(appointment.appointment_date).getFullYear()"></p>
+                                    </div>
+                                </div>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm"
+                                      :class="{
+                                        'bg-amber-50 text-amber-600 border border-amber-100': appointment.status === 'pending',
+                                        'bg-emerald-50 text-emerald-600 border border-emerald-100': appointment.status === 'confirmed',
+                                        'bg-rose-50 text-rose-600 border border-rose-100': appointment.status === 'declined',
+                                        'bg-slate-50 text-slate-500 border border-slate-100': appointment.status === 'cancelled'
+                                      }">
+                                    <span x-text="appointment.status"></span>
+                                </span>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-serif text-slate-900" x-text="appointment.service_type"></h4>
+                                <p class="text-[11px] text-slate-500 italic mt-1 line-clamp-2" x-text="'&quot;' + (appointment.message || 'No details provided.') + '&quot;'"></p>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <template x-if="paginatedAppointments.length === 0">
+                        <div class="p-8 text-center">
+                            <p class="text-slate-400 font-serif text-lg">No appointments found yet.</p>
+                            <button @click.prevent="$dispatch('open-modal', 'appointment-modal')" class="text-sky-600 font-bold uppercase text-[9px] tracking-widest mt-2 inline-block hover:underline">Start your project brief &rarr;</button>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Desktop Table (Hidden on mobile, visible on desktop) -->
+                <div class="hidden md:block overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50/50 border-b border-slate-100">

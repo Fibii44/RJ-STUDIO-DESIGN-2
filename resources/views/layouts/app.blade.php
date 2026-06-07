@@ -58,20 +58,34 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     </head>
     <body class="font-sans antialiased text-slate-900 bg-slate-50 selection:bg-sky-500/30">
-        <div x-data="{ sidebarOpen: true }" class="flex min-h-screen">
-            @auth
-                @if(request()->routeIs('admin.*') || request()->routeIs('home') || request()->routeIs('client.*') || request()->routeIs('support'))
-                    <x-sidebar />
-                @endif
-            @endauth
+        @php
+            $showSidebar = Auth::check() && (
+                request()->routeIs('admin.*') || 
+                request()->routeIs('home') || 
+                request()->routeIs('client.*') || 
+                request()->routeIs('support') || 
+                request()->routeIs('profile.*')
+            );
+        @endphp
+        <div x-data="{ sidebarOpen: localStorage.getItem('sidebarOpen') !== null ? localStorage.getItem('sidebarOpen') === 'true' : window.innerWidth > 1024 }" x-init="$watch('sidebarOpen', val => localStorage.setItem('sidebarOpen', val))" class="flex min-h-screen">
+            @if($showSidebar)
+                <x-sidebar />
+            @endif
 
             <div class="flex-1 flex flex-col"
-                 :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
+                 :class="sidebarOpen && {{ $showSidebar ? 'true' : 'false' }} ? 'lg:pl-72' : ({{ $showSidebar ? 'true' : 'false' }} ? 'lg:pl-24' : '')">
                 @include('layouts.navigation')
 
                 @auth
                 <!-- Authenticated Top Navbar -->
-                <div class="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-50 flex items-center justify-end px-8 sticky top-0 z-50">
+                <div class="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-50 flex items-center justify-between lg:justify-end px-8 sticky top-0 z-50">
+                    <!-- Mobile Sidebar Toggle -->
+                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-slate-100 transition-all focus:outline-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
                     <div x-data="{ dropdownOpen: false }" class="relative">
                         <button @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="flex items-center gap-4 hover:opacity-80 transition-opacity focus:outline-none">
                             <div class="flex flex-col text-right hidden sm:flex">
@@ -95,7 +109,16 @@
                              x-transition:leave-end="opacity-0 scale-95 transform -translate-y-2"
                              class="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50"
                              style="display: none;">
-                            <div class="p-2">
+                            <div class="p-2 space-y-1">
+                                <a href="{{ route('profile.edit') }}" class="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-sky-600 hover:bg-sky-50 rounded-xl transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                    <span>My Profile</span>
+                                </a>
+
+                                <div class="border-t border-slate-100 my-1"></div>
+
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors">

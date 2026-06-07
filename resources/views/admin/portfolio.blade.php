@@ -56,12 +56,11 @@
             </div>
             
             <div class="flex gap-4">
-                <button @click="showUpload = !showUpload" 
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-sky-600 transition shadow-xl">
+                <x-primary-button @click="showUpload = !showUpload" class="gap-2">
                     <svg x-show="!showUpload" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                     <svg x-show="showUpload" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                     <span x-text="showUpload ? 'Close Form' : 'Add New Work'"></span>
-                </button>
+                </x-primary-button>
             </div>
         </div>
 

@@ -41,21 +41,32 @@
         .luxury-scroll::-webkit-scrollbar-thumb:hover {
             background-color: #CBD5E1;
         }
+        @media print {
+            .no-print { display: none !important; }
+            .lg\:pl-72, .lg\:pl-24 { padding-left: 0 !important; }
+            body, html { background: white !important; }
+        }
     </style>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @stack('styles')
 </head>
 <body class="font-sans antialiased text-slate-900 bg-slate-50 selection:bg-sky-500/30">
-    <div x-data="{ sidebarOpen: true }" class="flex min-h-screen">
+    <div x-data="{ sidebarOpen: localStorage.getItem('sidebarOpen') !== null ? localStorage.getItem('sidebarOpen') === 'true' : window.innerWidth > 1024 }" x-init="$watch('sidebarOpen', val => localStorage.setItem('sidebarOpen', val))" class="flex min-h-screen">
         @auth
             <x-sidebar />
         @endauth
 
         <div class="flex-1 flex flex-col"
-             :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
+             :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-24' : '')">
             
-            <header class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-end px-8 sticky top-0 z-50">
+            <header class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between lg:justify-end px-8 sticky top-0 z-50 no-print">
+                 <!-- Mobile Sidebar Toggle -->
+                 <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-slate-100 transition-all focus:outline-none">
+                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                     </svg>
+                 </button>
                  
                  <div class="flex items-center gap-6">
                     <div class="flex flex-col items-end">

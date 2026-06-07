@@ -33,20 +33,20 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <!-- Filter Bar -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-100 mb-12 pb-4">
-                <div class="flex gap-10 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <div class="flex flex-wrap gap-x-8 gap-y-4 md:gap-10">
                     <button @click="activeCategory = 'All'" 
                             :class="activeCategory === 'All' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 outline-none">
+                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-3 outline-none">
                         All Projects
                     </button>
                     <button @click="activeCategory = 'Design'" 
                             :class="activeCategory === 'Design' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 outline-none">
+                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-3 outline-none">
                         Architectural Design
                     </button>
                     <button @click="activeCategory = 'Construction'" 
                             :class="activeCategory === 'Construction' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 outline-none">
+                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-3 outline-none">
                         Construction
                     </button>
                 </div>

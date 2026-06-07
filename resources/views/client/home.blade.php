@@ -67,7 +67,7 @@
                     @endif
                 </a>
 
-                <div class="bg-white rounded-card p-10 border border-slate-100 shadow-sm flex flex-col justify-between">
+                <div class="bg-white rounded-card p-6 sm:p-10 border border-slate-100 shadow-sm flex flex-col justify-between">
                     <div>
                         <h4 class="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-8">Upcoming Appointments</h4>
                         
@@ -139,7 +139,7 @@
                 </div>
 
                 <div class="space-y-10">
-                    <div class="bg-slate-900 rounded-card p-10 text-white shadow-2xl relative overflow-hidden">
+                    <div class="bg-slate-900 rounded-card p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
                          <p class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-400 mb-6">Studio Note</p>
                          <p class="text-lg font-serif italic leading-relaxed text-slate-200">"Welcome to the portal. Here you can track your modern villa's progress and schedule meetings with Feby Angela."</p>
                          <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>

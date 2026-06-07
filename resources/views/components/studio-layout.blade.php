@@ -47,17 +47,24 @@
         @stack('styles')
     </head>
     <body class="antialiased bg-white text-slate-900 font-sans selection:bg-sky-500/30 overflow-x-hidden">
-        <div x-data="{ sidebarOpen: true }" class="flex min-h-screen">
+        <div x-data="{ sidebarOpen: localStorage.getItem('sidebarOpen') !== null ? localStorage.getItem('sidebarOpen') === 'true' : window.innerWidth > 1024 }" x-init="$watch('sidebarOpen', val => localStorage.setItem('sidebarOpen', val))" class="flex min-h-screen">
             @auth
                 <x-sidebar />
             @endauth
 
             <div class="flex-1 flex flex-col"
-                 :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'pl-24' : '')">
+                 :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-24' : '')">
                 
                 @auth
                 <!-- Authenticated Top Navbar -->
-                <div class="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-50 flex items-center justify-end px-8 sticky top-0 z-50">
+                <div class="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-50 flex items-center justify-between lg:justify-end px-8 sticky top-0 z-50">
+                    <!-- Mobile Sidebar Toggle -->
+                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-slate-100 transition-all focus:outline-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
                     <div x-data="{ dropdownOpen: false }" class="relative">
                         <button @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="flex items-center gap-4 hover:opacity-80 transition-opacity focus:outline-none">
                             <div class="flex flex-col text-right hidden sm:flex">

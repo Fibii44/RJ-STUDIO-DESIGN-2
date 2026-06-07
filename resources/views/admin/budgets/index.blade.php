@@ -27,6 +27,9 @@
                 ['label' => 'Utilization', 'class' => 'text-center']
             ]"
         >
+            <x-slot name="filter">
+                <x-table-filter placeholder="Search projects..." id="project-search" />
+            </x-slot>
             @forelse($projects as $project)
                 @php 
                     $spent = $project->total_spent;

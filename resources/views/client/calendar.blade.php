@@ -41,34 +41,35 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <!-- Calendar Grid -->
-            <div class="lg:col-span-8 bg-white rounded-card border border-slate-100 shadow-sm overflow-hidden p-8">
+            <div class="lg:col-span-8 bg-white rounded-card border border-slate-100 shadow-sm overflow-hidden p-4 sm:p-8">
                 <div class="grid grid-cols-7 mb-6">
                     <template x-for="day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']">
-                        <div class="text-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 py-4" x-text="day"></div>
+                        <div class="text-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 py-2 sm:py-4" x-text="day"></div>
                     </template>
                 </div>
 
-                <div class="grid grid-cols-7 gap-2">
+                <div class="grid grid-cols-7 gap-1 sm:gap-2">
                     <template x-for="blank in blanks">
-                        <div class="aspect-square bg-slate-50/30 rounded-2xl border border-dashed border-slate-100/50"></div>
+                        <div class="aspect-square bg-slate-50/30 rounded-lg sm:rounded-2xl border border-dashed border-slate-100/50"></div>
                     </template>
 
                     <template x-for="date in daysInMonth">
-                        <div class="aspect-square relative group rounded-2xl border transition-all duration-300 flex flex-col p-3"
+                        <div class="aspect-square relative group rounded-lg sm:rounded-2xl border transition-all duration-300 flex flex-col p-1.5 sm:p-3"
                              :class="{
                                 'bg-sky-50 border-sky-100 ring-4 ring-sky-50/50': isToday(date),
                                 'bg-white border-slate-100 hover:border-sky-200 hover:shadow-md cursor-pointer': !isToday(date)
                              }"
                              @click="selectDay(date)">
                             
-                            <span class="text-xs font-black" 
+                            <span class="text-[10px] sm:text-xs font-black" 
                                   :class="isToday(date) ? 'text-sky-600' : 'text-slate-400 group-hover:text-slate-900'"
                                   x-text="date"></span>
 
                             <!-- Appointment Indicators (Smart Stacking) -->
-                            <div class="mt-auto flex flex-col gap-1 w-full">
+                            <div class="mt-auto flex flex-col items-center sm:items-stretch gap-1 w-full">
+                                <!-- Desktop text badge -->
                                 <template x-for="(app, index) in getAppointmentsForDate(date).slice(0, 2)">
-                                    <div class="px-2 py-0.5 rounded-md transition-all duration-300 truncate"
+                                    <div class="hidden sm:block px-2 py-0.5 rounded-md transition-all duration-300 truncate"
                                          :class="{
                                             'bg-amber-500/10 text-amber-700 border border-amber-200': app.status === 'pending',
                                             'bg-emerald-500 text-white shadow-sm': app.status === 'confirmed',
@@ -79,9 +80,21 @@
                                     </div>
                                 </template>
                                 
-                                <!-- Overflow Indicator -->
+                                <!-- Mobile dot badge -->
+                                <div class="flex sm:hidden gap-0.5 justify-center flex-wrap">
+                                    <template x-for="(app, index) in getAppointmentsForDate(date).slice(0, 3)">
+                                        <span class="w-1.5 h-1.5 rounded-full"
+                                              :class="{
+                                                 'bg-amber-500': app.status === 'pending',
+                                                 'bg-emerald-500': app.status === 'confirmed',
+                                                 'bg-rose-400': app.status === 'declined'
+                                              }"></span>
+                                    </template>
+                                </div>
+                                
+                                <!-- Overflow Indicator (Desktop only) -->
                                 <template x-if="getAppointmentsForDate(date).length > 2">
-                                    <div class="text-[6px] font-black text-slate-400 text-center py-0.5 uppercase tracking-widest bg-slate-50 rounded border border-slate-100">
+                                    <div class="hidden sm:block text-[6px] font-black text-slate-400 text-center py-0.5 uppercase tracking-widest bg-slate-50 rounded border border-slate-100">
                                         +<span x-text="getAppointmentsForDate(date).length - 2"></span> more
                                     </div>
                                 </template>

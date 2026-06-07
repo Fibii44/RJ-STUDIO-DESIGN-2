@@ -9,20 +9,6 @@ use Illuminate\Http\Request;
 
 class ProjectLaborController extends Controller
 {
-    /**
-     * Display a global list of all labor logs across all construction projects.
-     */
-    public function index()
-    {
-        $labors = ProjectLabor::with('constructionProject')
-            ->orderBy('labor_date', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
-
-        $totalLaborSpent = ProjectLabor::sum('amount');
-
-        return view('admin.labors.index', compact('labors', 'totalLaborSpent'));
-    }
 
     public function store(Request $request, ConstructionProject $project)
     {

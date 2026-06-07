@@ -16,8 +16,14 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
+        
+        $parts = explode(' ', $user->name, 2);
+        $user->first_name = $parts[0] ?? '';
+        $user->last_name = $parts[1] ?? '';
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 
@@ -26,13 +32,21 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validated();
+        $user = $request->user();
+        
+        $user->name = $validated['first_name'] . ' ' . $validated['last_name'];
+        $user->fill([
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+        ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

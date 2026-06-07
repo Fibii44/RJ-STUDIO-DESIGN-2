@@ -1,5 +1,12 @@
-<aside class="fixed left-0 top-0 bottom-0 z-[150] bg-white border-r border-slate-100 shadow-premium flex flex-col"
-    :class="sidebarOpen ? 'w-72' : 'w-24'">
+<!-- Mobile Backdrop Overlay -->
+<div x-show="sidebarOpen" 
+     x-transition:opacity
+     @click="sidebarOpen = false" 
+     class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[140] lg:hidden" 
+     style="display: none;"></div>
+
+<aside class="fixed top-0 bottom-0 z-[150] bg-white border-r border-slate-100 shadow-premium flex flex-col transition-all duration-300 no-print"
+    :class="sidebarOpen ? 'w-72 left-0' : 'w-24 lg:left-0 -left-24'">
 
     <!-- Header Section with Integrated Toggle -->
     <div class="h-24 flex items-center px-6 border-b border-slate-50 relative overflow-hidden">
@@ -99,19 +106,10 @@
                         :active="request()->routeIs('admin.budgets.*')" icon="financials">
                         Construction Financials
                     </x-sidebar-link>
-                    <x-sidebar-dropdown title="Resource Management" icon="procurement"
-                        :active="request()->routeIs('admin.materials.*') || request()->routeIs('admin.labors.*')">
-                        <div class="mt-1 space-y-1">
-                            <a href="{{ route('admin.materials.index') }}"
-                                class="flex items-center h-10 px-4 rounded-xl text-[10px] font-black tracking-widest transition-all {{ request()->routeIs('admin.materials.*') ? 'bg-sky-50 text-sky-600' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900' }}">
-                                Material Registry
-                            </a>
-                            <a href="{{ route('admin.labors.index') }}"
-                                class="flex items-center h-10 px-4 rounded-xl text-[10px] font-black tracking-widest transition-all {{ request()->routeIs('admin.labors.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900' }}">
-                                Labor Tracker
-                            </a>
-                        </div>
-                    </x-sidebar-dropdown>
+                    <x-sidebar-link href="{{ route('admin.materials.index') }}"
+                        :active="request()->routeIs('admin.materials.*')" icon="procurement">
+                        Material Registry
+                    </x-sidebar-link>
                 </div>
             @endif
         </nav>

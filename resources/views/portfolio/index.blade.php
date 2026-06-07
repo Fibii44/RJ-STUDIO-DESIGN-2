@@ -5,7 +5,7 @@
     </style>
     @endpush
 
-    <main class="pt-12 {{ Auth::check() ? 'lg:pt-16' : 'lg:pt-32' }} pb-32" 
+    <main class="{{ Auth::check() ? 'pt-16 lg:pt-16' : 'pt-32 lg:pt-40' }} pb-32" 
         x-data='{ 
             activeCategory: "All",
             activeYear: "All",
@@ -53,28 +53,28 @@
                 @endguest
             </div>
             
-            <div class="flex flex-col gap-8 mt-20">
+            <div class="flex flex-col gap-8 mt-12 md:mt-20 w-full">
                 <!-- Category Filter -->
-                <div class="flex gap-10 border-b border-slate-100 pb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <div class="flex flex-wrap gap-x-8 gap-y-4 border-b border-slate-100 pb-4 w-full">
                     <button @click="activeCategory = 'All'; displayLimit = 6" 
                             :class="activeCategory === 'All' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 transition-all outline-none">
+                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-2 transition-all outline-none">
                         All Projects
                     </button>
                     <button @click="activeCategory = 'Design'; displayLimit = 6" 
                             :class="activeCategory === 'Design' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 transition-all outline-none">
+                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-2 transition-all outline-none">
                         Architectural Design
                     </button>
                     <button @click="activeCategory = 'Construction'; displayLimit = 6" 
                             :class="activeCategory === 'Construction' ? 'text-sky-600 border-b-2 border-sky-600' : 'text-slate-400 hover:text-slate-900'" 
-                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-4 -mb-4.5 transition-all outline-none">
+                            class="text-[10px] font-black uppercase tracking-[0.3em] pb-2 transition-all outline-none">
                         Construction
                     </button>
                 </div>
 
                 <!-- Year Filter -->
-                <div class="flex items-center gap-6 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <div class="flex flex-wrap items-center gap-3 md:gap-6 w-full">
                     <span class="text-[9px] font-black uppercase tracking-widest text-slate-300">Archive Year:</span>
                     <button @click="activeYear = 'All'; displayLimit = 6" 
                             :class="activeYear === 'All' ? 'bg-sky-600 text-white shadow-lg shadow-sky-200' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'" 
@@ -97,23 +97,23 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <template x-for="project in visibleProjects" :key="project.id">
                     <a :href="'/portfolio/' + project.id" class="group" 
-                         x-transition:enter="transition ease-out duration-500"
-                         x-transition:enter-start="opacity-0 translate-y-8"
-                         x-transition:enter-end="opacity-100 translate-y-0">
+                          x-transition:enter="transition ease-out duration-500"
+                          x-transition:enter-start="opacity-0 translate-y-8"
+                          x-transition:enter-end="opacity-100 translate-y-0">
                         
                         <div class="aspect-[16/10] rounded-card overflow-hidden bg-slate-50 relative shadow-sm group-hover:shadow-premium transition-all duration-700 border border-slate-100">
                             <img :src="project.image_path" class="object-cover w-full h-full transition-all duration-1000 group-hover:scale-105">
                             
                             <!-- Floating Info Badge (App-style) -->
-                            <div class="absolute top-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0 z-20">
-                                <div class="px-6 py-3 bg-slate-900 text-white rounded-2xl shadow-2xl flex flex-col gap-0.5 border border-white/10">
-                                    <h3 class="text-xs font-black tracking-[0.2em]" x-text="project.title"></h3>
-                                    <p class="text-[8px] text-sky-400 font-bold uppercase tracking-[0.15em]" x-text="project.category + ' • ' + project.year"></p>
+                            <div class="absolute top-4 left-4 md:top-6 md:left-6 md:opacity-0 group-hover:opacity-100 transition-all duration-500 md:translate-x-[-10px] group-hover:translate-x-0 z-20">
+                                <div class="px-4 py-2 md:px-6 md:py-3 bg-slate-900 text-white rounded-2xl shadow-2xl flex flex-col gap-0.5 border border-white/10">
+                                    <h3 class="text-[10px] md:text-xs font-black tracking-[0.2em]" x-text="project.title"></h3>
+                                    <p class="text-[7px] md:text-[8px] text-sky-400 font-bold uppercase tracking-[0.15em]" x-text="project.category + ' • ' + project.year"></p>
                                 </div>
                             </div>
 
                             <template x-if="project.images && project.images.length > 1">
-                                <div class="absolute bottom-8 right-8 px-5 py-2.5 bg-white/40 backdrop-blur-md rounded-full text-[9px] font-black text-slate-900 uppercase tracking-widest border border-white/20 z-10 shadow-xl opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                                <div class="absolute bottom-4 right-4 md:bottom-8 md:right-8 px-4 py-2 md:px-5 md:py-2.5 bg-white/40 backdrop-blur-md rounded-full text-[8px] md:text-[9px] font-black text-slate-900 uppercase tracking-widest border border-white/20 z-10 shadow-xl md:opacity-0 group-hover:opacity-100 md:translate-y-2 group-hover:translate-y-0 transition-all duration-500">
                                     <span x-text="project.images.length"></span> Perspectives
                                 </div>
                             </template>

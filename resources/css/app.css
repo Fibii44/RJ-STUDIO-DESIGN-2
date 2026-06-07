@@ -25,6 +25,15 @@
     .rounded-card { border-radius: var(--card-radius) !important; }
     .rounded-inner { border-radius: var(--inner-radius) !important; }
     .rounded-btn { border-radius: var(--button-radius) !important; }
+    
+    /* Hide scrollbars but keep functionality */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;  /* IE/Edge */
+        scrollbar-width: none;     /* Firefox */
+    }
 }
 
 @layer base {

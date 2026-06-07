@@ -163,11 +163,6 @@
             </div>
         </div>
 
-        <!-- Design Philosophy Placeholder -->
-        <div class="bg-slate-50 p-12 rounded-card border border-slate-100 text-center space-y-4">
-            <div class="inline-block px-4 py-1.5 rounded-full bg-white border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Studio Insight</div>
-            <h5 class="text-3xl font-serif text-slate-900 leading-tight italic">"Good architecture is like a good conversation. <br>It should listen as much as it speaks."</h5>
-            <p class="text-slate-400 text-xs font-medium">— Randolf Jan Design Studio</p>
-        </div>
+
     </div>
 </x-admin-layout>
