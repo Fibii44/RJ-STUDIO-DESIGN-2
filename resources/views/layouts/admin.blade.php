@@ -57,8 +57,20 @@
             <x-sidebar />
         @endauth
 
-        <div class="flex-1 flex flex-col"
+        <div class="flex-1 flex flex-col transition-[padding] duration-300"
+             id="main-content"
              :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-24' : '')">
+            @auth
+            <script>
+                // Pre-apply sidebar padding before Alpine.js initialises to prevent flash
+                (function() {
+                    var open = localStorage.getItem('sidebarOpen');
+                    var isOpen = open !== null ? open === 'true' : window.innerWidth > 1024;
+                    var el = document.getElementById('main-content');
+                    if (el) el.classList.add(isOpen ? 'lg:pl-72' : 'lg:pl-24');
+                })();
+            </script>
+            @endauth
             
             <header class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between lg:justify-end px-8 sticky top-0 z-50 no-print">
                  <!-- Mobile Sidebar Toggle -->
