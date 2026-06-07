@@ -155,17 +155,5 @@
             </div>
         </template>
 
-        @guest
-        <!-- Simple Footer CTA -->
-        <section class="py-32 bg-white text-center">
-            <div class="max-w-2xl mx-auto px-6 space-y-12">
-                <div class="w-12 h-px bg-slate-200 mx-auto"></div>
-                <h3 class="text-4xl lg:text-6xl font-serif text-slate-900 italic leading-tight">Inspired?</h3>
-                <a href="{{ route('services') }}" class="inline-block px-12 py-5 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-sky-600 transition-all shadow-xl shadow-slate-900/10">
-                    Get in Touch
-                </a>
-            </div>
-        </section>
-        @endguest
     </main>
 </x-studio-layout>

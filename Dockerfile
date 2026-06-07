@@ -11,8 +11,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nginx \
-    nodejs \
-    npm \
     libpq-dev
 
 # Clear cache
@@ -37,10 +35,8 @@ WORKDIR /var/www
 # Copy existing application directory contents
 COPY . /var/www
 
-# Install dependencies
+# Install PHP dependencies only (assets are pre-built locally and committed)
 RUN composer install --no-interaction --optimize-autoloader --no-dev
-RUN npm install
-RUN npm run build
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/sites-available/default
