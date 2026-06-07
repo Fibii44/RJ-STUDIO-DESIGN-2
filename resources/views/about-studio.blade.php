@@ -64,18 +64,21 @@
                             His practice is rooted in <span class="font-bold text-sky-600">"Perspective"</span>—ensuring every structure is accessible, transparent, and built to last for generations.
                         </p>
                     </div>
-                    <div class="flex justify-center lg:justify-start gap-12 pt-6">
-                        <div class="flex flex-col gap-2">
-                            <span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Network</span>
-                            <div class="flex gap-8">
-                                <a href="#" class="text-[10px] font-black uppercase tracking-widest text-slate-900 hover:text-sky-600 transition">LinkedIn</a>
-                                <a href="#" class="text-[10px] font-black uppercase tracking-widest text-slate-900 hover:text-sky-600 transition">Behance</a>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Direct</span>
-                            <a href="{{ route('portfolio') }}" class="text-[10px] font-black uppercase tracking-widest text-sky-600 hover:underline transition">View Portfolio &rarr;</a>
-                        </div>
+                    <div class="flex justify-center lg:justify-start pt-6">
+                        <a href="https://www.facebook.com/profile.php?id=61581778836827" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white rounded-full font-sans font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-premium transition-all duration-300 transform hover:-translate-y-0.5 group">
+                            <!-- Facebook SVG Icon -->
+                            <svg class="w-4 h-4 fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
+                                <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/>
+                            </svg>
+                            <span>Connect on Facebook</span>
+                            <!-- Arrow SVG Icon -->
+                            <svg class="w-4 h-4 stroke-current stroke-2 fill-none transition-transform duration-300 translate-x-0 group-hover:translate-x-1" viewBox="0 0 24 24">
+                                <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
                     </div>
                 </div>
                 <div class="absolute top-0 right-0 w-96 h-96 bg-sky-50/50 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>

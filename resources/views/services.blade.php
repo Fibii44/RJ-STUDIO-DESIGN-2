@@ -60,7 +60,7 @@
                         </div>
 
                         <h3 class="text-4xl font-serif mb-8 text-white leading-tight">Design & <span class="text-sky-400 italic">Build</span></h3>
-                        <p class="text-sky-100/70 leading-relaxed mb-12 text-lg">The complete architectural experience. We manage everything from the first sketch to the final brick, including IoT integration.</p>
+                        <p class="text-sky-100/70 leading-relaxed mb-12 text-lg">The ultimate all-in-one package. We manage the entire lifecycle of your project, from the initial architectural drawings to the final structural build.</p>
                         
                         <ul class="space-y-8 mb-16">
                             <li class="flex items-center gap-5 text-[10px] font-black uppercase tracking-widest text-white">
@@ -69,7 +69,7 @@
                             </li>
                             <li class="flex items-center gap-5 text-[10px] font-black uppercase tracking-widest text-white">
                                 <svg class="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                                Smart-Home Tech Setup
+                                Unified Design & Build
                             </li>
                             <li class="flex items-center gap-5 text-[10px] font-black uppercase tracking-widest text-white">
                                 <svg class="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>

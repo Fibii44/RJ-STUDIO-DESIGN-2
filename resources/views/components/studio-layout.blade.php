@@ -1,3 +1,9 @@
+@props([
+    'title' => null,
+    'description' => null,
+    'keywords' => null,
+    'ogImage' => null
+])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -5,7 +11,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ $title ?? 'RJ DESIGN STUDIO' }}</title>
+        <!-- SEO Metadata -->
+        <title>{{ $title ?? 'RJ DESIGN STUDIO | Architectural Design & Build Firm' }}</title>
+        <meta name="description" content="{{ $description ?? 'RJ Design Studio is an experienced architectural design and construction firm specializing in bespoke plans, 3D visualizations, and turnkey Design & Build services.' }}">
+        <meta name="keywords" content="{{ $keywords ?? 'RJ Design Studio, RJ Design, architecture firm, design and build, architectural design, construction services, Randolf Jan Felices, residential design, commercial build, structural integrity' }}">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index, follow">
+
+        <!-- Open Graph / Facebook / LinkedIn -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="{{ $title ?? 'RJ DESIGN STUDIO | Architectural Design & Build Firm' }}">
+        <meta property="og:description" content="{{ $description ?? 'RJ Design Studio is an experienced architectural design and construction firm specializing in bespoke plans, 3D visualizations, and turnkey Design & Build services.' }}">
+        <meta property="og:image" content="{{ $ogImage ?? asset('/images/Rj-logo.webp') }}">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ url()->current() }}">
+        <meta property="twitter:title" content="{{ $title ?? 'RJ DESIGN STUDIO | Architectural Design & Build Firm' }}">
+        <meta property="twitter:description" content="{{ $description ?? 'RJ Design Studio is an experienced architectural design and construction firm specializing in bespoke plans, 3D visualizations, and turnkey Design & Build services.' }}">
+        <meta property="twitter:image" content="{{ $ogImage ?? asset('/images/Rj-logo.webp') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
