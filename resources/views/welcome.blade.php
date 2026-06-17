@@ -12,9 +12,9 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16 relative z-10">
                     <!-- Left Column: Giant Title (Span 8) -->
                     <div class="lg:col-span-8">
-                        <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-sans font-black tracking-tighter leading-[0.85] text-slate-900 uppercase">
-                            Built For <br>
-                            <span class="text-sky-600">Perspective</span>
+                        <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-serif text-slate-900 leading-tight">
+                            Built for <br>
+                            <span class="text-sky-600 italic">Perspective</span>
                         </h1>
                     </div>
 
