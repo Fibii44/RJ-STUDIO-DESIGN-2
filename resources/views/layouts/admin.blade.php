@@ -59,7 +59,7 @@
 
         <div class="flex-1 flex flex-col transition-[padding] duration-300"
              id="main-content"
-             :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-24' : '')">
+             :class="{ 'lg:pl-72': sidebarOpen && {{ Auth::check() ? 'true' : 'false' }}, 'lg:pl-24': !sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} }">
             @auth
             <script>
                 // Pre-apply sidebar padding before Alpine.js initialises to prevent flash

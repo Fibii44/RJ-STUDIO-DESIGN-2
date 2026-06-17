@@ -73,7 +73,7 @@
             @endif
 
             <div class="flex-1 flex flex-col"
-                 :class="sidebarOpen && {{ $showSidebar ? 'true' : 'false' }} ? 'lg:pl-72' : ({{ $showSidebar ? 'true' : 'false' }} ? 'lg:pl-24' : '')">
+                 :class="{ 'lg:pl-72': sidebarOpen && {{ $showSidebar ? 'true' : 'false' }}, 'lg:pl-24': !sidebarOpen && {{ $showSidebar ? 'true' : 'false' }} }">
                 @include('layouts.navigation')
 
                 @auth

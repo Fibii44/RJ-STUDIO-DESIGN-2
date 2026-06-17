@@ -53,7 +53,7 @@
             @endauth
 
             <div class="flex-1 flex flex-col"
-                 :class="sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-72' : ({{ Auth::check() ? 'true' : 'false' }} ? 'lg:pl-24' : '')">
+                 :class="{ 'lg:pl-72': sidebarOpen && {{ Auth::check() ? 'true' : 'false' }}, 'lg:pl-24': !sidebarOpen && {{ Auth::check() ? 'true' : 'false' }} }">
                 
                 @auth
                 <!-- Authenticated Top Navbar -->
