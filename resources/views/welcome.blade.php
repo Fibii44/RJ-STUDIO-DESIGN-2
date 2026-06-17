@@ -28,7 +28,7 @@
 
                 <!-- Bottom Row: Wide Image Banner overlapping the text -->
                 <div class="relative w-full z-20 -mt-16 md:-mt-28 lg:-mt-40 xl:-mt-48">
-                    <img src="{{ asset('images/home-pic.webp') }}" alt="Modern Architecture" class="w-full h-auto filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.12)]">
+                    <img src="{{ asset('images/home-pic.webp') }}?v={{ filemtime(public_path('images/home-pic.webp')) }}" alt="Modern Architecture" class="w-full h-auto filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.12)]">
                 </div>
             </div>
         </header>
