@@ -1,15 +1,16 @@
 <x-studio-layout title="Home | RJ DESIGN STUDIO">
     <main class="relative min-h-screen">
         <!-- Hero Section -->
-        <header class="relative min-h-screen flex items-center bg-white pt-24 lg:pt-28 overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-full opacity-5">
+        <header class="relative bg-white pt-24 lg:pt-28 overflow-hidden flex flex-col justify-between">
+            <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
                 <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-sky-500 rounded-full blur-[120px]"></div>
                 <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-sky-200 rounded-full blur-[120px]"></div>
             </div>
 
-            <div class="max-w-7xl mx-auto px-6 w-full relative z-10 py-12">
+            <!-- Content (Boxed) -->
+            <div class="max-w-7xl mx-auto px-6 w-full relative z-10 pt-12 pb-6">
                 <!-- Top Row: Giant Title + Description -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
                     <!-- Left Column: Giant Title (Span 8) -->
                     <div class="lg:col-span-8">
                         <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-serif text-slate-900 leading-tight">
@@ -25,11 +26,11 @@
                         </p>
                     </div>
                 </div>
+            </div>
 
-                <!-- Bottom Row: Wide Image Banner overlapping the text -->
-                <div class="relative w-full z-20 -mt-16 md:-mt-28 lg:-mt-40 xl:-mt-48">
-                    <img src="{{ asset('images/home-pic.webp') }}?v={{ filemtime(public_path('images/home-pic.webp')) }}" alt="Modern Architecture" class="w-full h-auto filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.12)]">
-                </div>
+            <!-- Full-bleed Image Banner (No drop shadow, merges white sky background seamlessly) -->
+            <div class="relative w-full z-20 -mt-16 md:-mt-28 lg:-mt-40 xl:-mt-48">
+                <img src="{{ asset('images/home-pic.webp') }}?v={{ filemtime(public_path('images/home-pic.webp')) }}" alt="Modern Architecture" class="w-full h-auto block">
             </div>
         </header>
 
